@@ -1,9 +1,11 @@
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
-import { FolderOpen, PenBox } from "lucide-react";
+import { FolderOpen, LogOut, PenBox } from "lucide-react";
+import { useAuth } from "@/app/context/AuthContext";
 
 const Header = () => {
+  const { auth } = useAuth();
   return (
     <header className="container mx-auto">
       <nav className="flex justify-between py-6 px-4 items-center ">
@@ -28,6 +30,19 @@ const Header = () => {
               <span className="hidden md:inline">Write New</span>
             </Button>
           </Link>
+          {auth.isAuthenticated ? (
+            <Button variant={"destructive"}>
+              <LogOut size={18} />
+              <span className="hidden md:inline">Logout</span>
+            </Button>
+          ) : (
+            <Link href="/sign-in">
+              <Button variant={"journal"}>
+                <LogOut size={18} />
+                <span className="hidden md:inline">Login</span>
+              </Button>
+            </Link>
+          )}
         </div>
       </nav>
     </header>

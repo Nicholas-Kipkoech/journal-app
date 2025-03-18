@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
 import { Toaster } from "sonner";
+import { AuthProvider } from "./context/AuthContext";
 
 const getInter = Inter({
   subsets: ["latin"],
@@ -15,9 +16,11 @@ export default function RootLayout({
   return (
     <html>
       <body className={`${getInter.className} antialiased`}>
-        <Toaster richColors position="top-right" />
-        <Header />
-        <main className="min-h-screen">{children}</main>
+        <AuthProvider>
+          <Toaster richColors position="top-right" />
+          <Header />
+          <main className="min-h-screen">{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );

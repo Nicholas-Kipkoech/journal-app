@@ -5,6 +5,7 @@ import { loginUser } from "@/app/(services)/api";
 import useFetch from "@/app/hooks/use-fetch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -21,13 +22,16 @@ const SignIn = () => {
     await login(request.email, request.password);
   };
 
+  // for navigation
+  const router = useRouter();
+
   useEffect(() => {
     if (data?.token) {
       localStorage.setItem("accessToken", data.token);
-
       toast.success("success", { description: data.message });
+      router.push("/dashboard");
     }
-  }, [data]);
+  }, [data, router]);
 
   return (
     <div className="">
@@ -46,7 +50,7 @@ const SignIn = () => {
             placeholder="Email"
             value={request.email}
             onChange={(e) => setRequest({ ...request, email: e.target.value })}
-            className="w-[20rem] h-[2.5rem]"
+            className="w-[25rem] h-[2.5rem]"
           />
         </div>
         <div>
@@ -58,7 +62,7 @@ const SignIn = () => {
               setRequest({ ...request, password: e.target.value })
             }
             placeholder="Last Name"
-            className="w-[20rem] h-[2.5rem]"
+            className="w-[25rem] h-[2.5rem]"
           />
         </div>
 
