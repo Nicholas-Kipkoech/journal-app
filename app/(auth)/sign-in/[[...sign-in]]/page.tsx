@@ -14,7 +14,7 @@ const SignIn = () => {
     password: "",
   });
 
-  const { data, loading, error, fn: login }: any = useFetch(loginUser);
+  const { data, loading, fn: login }: any = useFetch(loginUser);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,11 +24,10 @@ const SignIn = () => {
   useEffect(() => {
     if (data?.token) {
       localStorage.setItem("accessToken", data.token);
+
       toast.success("success", { description: data.message });
     }
   }, [data]);
-
-  console.log(data, loading, error);
 
   return (
     <div className="">
