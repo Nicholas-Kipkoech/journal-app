@@ -16,11 +16,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import TestimonialCarousel from "@/components/testimonial-carousel";
+import TestimonialCarousel from "../components/testimonial-carousel";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import { getDailyPrompt } from "@/actions/public";
-import faqs from "@/data/faqs";
+import { getDailyPrompt } from "../actions/public";
+import faqs from "../data/faqs.json";
 
 const features = [
   {
