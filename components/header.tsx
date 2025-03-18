@@ -18,12 +18,14 @@ const Header = () => {
 
         <div className="flex items-center gap-4">
           {/** Login and other auth logic here */}
-          <Link href="/dashboard#categories">
-            <Button variant={"outline"} className="flex items-center gap-2">
-              <FolderOpen size={18} />
-              <span className="hidden md:inline">Categories</span>
-            </Button>
-          </Link>
+          {auth.isAuthenticated && (
+            <Link href="/dashboard#collections">
+              <Button variant={"outline"} className="flex items-center gap-2">
+                <FolderOpen size={18} />
+                <span className="hidden md:inline">Collections</span>
+              </Button>
+            </Link>
+          )}
           <Link href="/journal/write">
             <Button variant={"journal"}>
               <PenBox size={18} />
