@@ -1,34 +1,72 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
+import { loginUser } from "@/app/(services)/api";
+import useFetch from "@/app/hooks/use-fetch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const SignIn = () => {
+  const [request, setRequest] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { data, loading, error, fn: login }: any = useFetch(loginUser);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await login(request.email, request.password);
+  };
+
+  useEffect(() => {
+    if (data?.token) {
+      localStorage.setItem("accessToken", data.token);
+      toast.success("success", { description: data.message });
+    }
+  }, [data]);
+
+  console.log(data, loading, error);
+
   return (
     <div className="">
       <span className="flex  justify-center font-bold text-[1.8rem] my-2">
         Sign In
       </span>
 
-      <div className="flex flex-col gap-4 border p-10 rounded-md shadow-2xl">
+      <form
+        className="flex flex-col gap-4 border p-10 mx-auto rounded-md shadow-2xl"
+        onSubmit={handleSubmit}
+      >
         <div>
           <label>Email</label>
           <Input
-            name=""
-            placeholder="Last Name"
-            className="w-[28rem] h-[2.5rem]"
+            type="email"
+            placeholder="Email"
+            value={request.email}
+            onChange={(e) => setRequest({ ...request, email: e.target.value })}
+            className="w-[20rem] h-[2.5rem]"
           />
         </div>
         <div>
           <label>Password</label>
           <Input
-            name=""
+            type="text"
+            value={request.password}
+            onChange={(e) =>
+              setRequest({ ...request, password: e.target.value })
+            }
             placeholder="Last Name"
-            className="w-[28rem] h-[2.5rem]"
+            className="w-[20rem] h-[2.5rem]"
           />
         </div>
 
-        <Button>Continue</Button>
-      </div>
+        <Button type="submit" className="bg-orange-500">
+          {loading ? "loggin in..." : "Continue"}
+        </Button>
+      </form>
     </div>
   );
 };

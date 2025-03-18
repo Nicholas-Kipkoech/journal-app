@@ -1,2 +1,42 @@
+"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Disables TypeScript's explicit 'any' rule, allowing 'any' type usage without warnings.
 
+import { useState } from "react";
+import { toast } from "sonner"; // Importing 'sonner' for toast notifications
 
+/**
+ * Custom hook for handling asynchronous requests.
+ * @param cb - A callback function that performs the API request.
+ */
+const useFetch = (cb: any) => {
+  const [data, setData] = useState(undefined);
+
+  const [loading, setLoading] = useState<boolean | null>(null);
+
+  const [error, setError] = useState<any | null>(null);
+
+  /**
+   * Executes the given callback function and manages state accordingly.
+   * @param args - Arguments to pass to the callback function.
+   */
+  const fn = async (...args: any[]) => {
+    setLoading(true);
+    setError(null); // Clear previous errors
+
+    try {
+      const response = await cb(...args); // Execute the provided function
+      setData(response);
+      setError(null);
+    } catch (error: any) {
+      setError(error);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { data, loading, error, fn };
+};
+
+export default useFetch;
