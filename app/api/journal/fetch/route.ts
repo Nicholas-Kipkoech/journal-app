@@ -1,23 +1,13 @@
+import { verifyAuthToken } from "@/app/lib/auth";
 import { getMoodById } from "@/app/lib/moods";
 import { db } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { userId, collectionId } = await req.json();
+    const { collectionId } = await req.json();
 
-    if (!userId) {
-      return NextResponse.json(
-        { error: "No user ID provided" },
-        { status: 400 }
-      );
-    }
-
-    const user = await db.user.findUnique({ where: { id: userId } });
-
-    if (!user) {
-      return NextResponse.json({ error: "No user found" }, { status: 404 });
-    }
+    const user = await verifyAuthToken();
 
     const where = {
       userId: user.id,

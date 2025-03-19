@@ -1,4 +1,5 @@
 import { getPixabayImage } from "@/actions/public";
+import { verifyAuthToken } from "@/app/lib/auth";
 import { MOODS } from "@/app/lib/moods";
 import { db } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
@@ -12,15 +13,8 @@ export async function GET(
 ) {
   try {
     const { id } = params;
-    const { userId } = await req.json();
 
-    if (!userId) throw new Error("Unauthorized");
-
-    const user = await db.user.findUnique({
-      where: { id: userId },
-    });
-    if (!user) throw new Error("User not found");
-
+    const user = await verifyAuthToken();
     const entry = await db.journalEntry.findFirst({
       where: { id: id, userId: user.id },
       include: {
@@ -53,15 +47,9 @@ export async function PATCH(
 ) {
   try {
     const { id } = params;
-    const { userId, mood, moodQuery, title, content, collectionId } =
-      await req.json();
+    const { mood, moodQuery, title, content, collectionId } = await req.json();
 
-    if (!userId) throw new Error("Unauthorized");
-
-    const user = await db.user.findUnique({
-      where: { id: userId },
-    });
-    if (!user) throw new Error("User not found");
+    const user = await verifyAuthToken();
 
     // Check if entry exists and belongs to user
     const existingEntry = await db.journalEntry.findFirst({
@@ -112,14 +100,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = params;
-    const { userId } = await req.json();
-
-    if (!userId) throw new Error("Unauthorized");
-
-    const user = await db.user.findUnique({
-      where: { id: userId },
-    });
-    if (!user) throw new Error("User not found");
+    const user = await verifyAuthToken();
 
     // Check if entry exists and belongs to user
     const existingEntry = await db.journalEntry.findFirst({
