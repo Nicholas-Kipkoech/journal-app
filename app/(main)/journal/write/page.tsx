@@ -17,13 +17,7 @@ import {
 
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import {
-  createJournalEntry,
-  updateJournalEntry,
-  getJournalEntry,
-  getDraft,
-  saveDraft,
-} from "@/actions/journal";
+
 import { getMoodById, MOODS } from "@/app/lib/moods";
 import { BarLoader } from "react-spinners";
 import { toast } from "sonner";
@@ -32,6 +26,11 @@ import "react-quill-new/dist/quill.snow.css";
 import CollectionForm from "@/components/collection-form";
 import { createCollection, getCollections } from "@/actions/collections";
 import useFetch from "@/app/hooks/use-fetch";
+import {
+  createJournalEntry,
+  getJournalEntry,
+  updateJournalEntry,
+} from "@/actions/journal";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -54,14 +53,6 @@ export default function JournalEntryPage() {
     data: existingEntry,
     fn: fetchEntry,
   } = useFetch(getJournalEntry);
-
-  const {
-    loading: draftLoading,
-    data: draftData,
-    fn: fetchDraft,
-  } = useFetch(getDraft);
-
-  const { loading: savingDraft, fn: saveDraftFn } = useFetch(saveDraft);
 
   const {
     loading: actionLoading,
@@ -102,7 +93,6 @@ export default function JournalEntryPage() {
       fetchEntry(editId);
     } else {
       setIsEditMode(false);
-      fetchDraft();
     }
   }, [editId]);
 
@@ -115,13 +105,6 @@ export default function JournalEntryPage() {
         mood: existingEntry.mood || "",
         collectionId: existingEntry.collectionId || "",
       });
-    } else if (draftData?.success && draftData?.data) {
-      reset({
-        title: draftData.data.title || "",
-        content: draftData.data.content || "",
-        mood: draftData.data.mood || "",
-        collectionId: "",
-      });
     } else {
       reset({
         title: "",
@@ -130,7 +113,7 @@ export default function JournalEntryPage() {
         collectionId: "",
       });
     }
-  }, [draftData, isEditMode, existingEntry]);
+  }, [isEditMode, existingEntry]);
 
   // Handle collection creation success
   useEffect(() => {
@@ -146,9 +129,6 @@ export default function JournalEntryPage() {
   useEffect(() => {
     if (actionResult && !actionLoading) {
       // Clear draft after successful publish
-      if (!isEditMode) {
-        saveDraftFn({ title: "", content: "", mood: "" });
-      }
 
       router.push(
         `/collection/${
@@ -174,27 +154,12 @@ export default function JournalEntryPage() {
 
   const formData = watch();
 
-  const handleSaveDraft = async () => {
-    if (!isDirty) {
-      toast.error("No changes to save");
-      return;
-    }
-    const result = await saveDraftFn(formData);
-    if (result?.success) {
-      toast.success("Draft saved successfully");
-    }
-  };
-
   const handleCreateCollection = async (data) => {
+    console.log("data", data);
     createCollectionFn(data);
   };
 
-  const isLoading =
-    collectionsLoading ||
-    entryLoading ||
-    draftLoading ||
-    actionLoading ||
-    savingDraft;
+  const isLoading = collectionsLoading || entryLoading || actionLoading;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -319,17 +284,6 @@ export default function JournalEntryPage() {
         </div>
 
         <div className="space-x-4 flex">
-          {!isEditMode && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleSaveDraft}
-              disabled={savingDraft || !isDirty}
-            >
-              {savingDraft && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Save as Draft
-            </Button>
-          )}
           <Button
             type="submit"
             variant="journal"

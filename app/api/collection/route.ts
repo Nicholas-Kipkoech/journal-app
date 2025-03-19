@@ -16,13 +16,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const { userId, name, description } = result.data;
+    const { name, description } = result.data;
 
-    // check if user exists
-    const user = await db.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      return NextResponse.json({ message: "user not found" }, { status: 404 });
-    }
+    const user = await verifyAuthToken();
     // creat collection
     const collection = await db.collection.create({
       data: {
@@ -32,10 +28,17 @@ export async function POST(req: Request) {
       },
     });
     revalidatePath("/dashboard");
-    return NextResponse.json({
+
+    const response = NextResponse.json({
       message: "collection added success",
       data: { collection: collection },
     });
+
+    response.headers.set(
+      "Access-Control-Allow-Origin",
+      "http://localhost:3000"
+    );
+    response.headers.set("Access-Control-Allow-Credentials", "true");
   } catch (error) {
     console.error(error);
     return NextResponse.json(

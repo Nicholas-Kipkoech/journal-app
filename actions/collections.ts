@@ -14,33 +14,27 @@ export async function getCollections() {
       throw new Error(`Failed to fetch collections: ${response.statusText}`);
     }
     const data = await response.json();
-    return data.collections;
+    return data.data;
   } catch (error) {
     console.error("error", error);
     return [];
   }
 }
 
-interface Collection {
-  name: string;
-  description: string;
-  userId: string;
-}
-
-export async function createCollection(collection: Collection) {
+export async function createCollection(name: string, description: string) {
   try {
     const response = await fetch(`http://localhost:3000/api/collection`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(collection),
+      body: JSON.stringify({ name, description }),
+      credentials: "include",
     });
     if (!response.ok) {
       throw new Error(`Failed to creating collection: ${response.statusText}`);
     }
-    const data = await response.json();
-    return data.collections;
+    return { success: true, data: response.json() };
   } catch (error) {
     console.error("error", error);
     return [];

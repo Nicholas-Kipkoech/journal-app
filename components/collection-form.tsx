@@ -23,6 +23,7 @@ const CollectionForm = ({ onSuccess, loading, open, setOpen }) => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log("data", data);
     onSuccess(data);
   });
 
