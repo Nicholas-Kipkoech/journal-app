@@ -11,7 +11,7 @@ interface TokenPayload extends JwtPayload {
 export async function verifyAuthToken() {
   const secret = process.env.JWT_SECRET;
   const cookieStore = cookies();
-  const token = (await cookieStore).get("token")?.value;
+  const token = (await cookieStore).get("accessToken")?.value;
   if (!secret) {
     throw new Error("JWT_SECRET is not defined");
   }

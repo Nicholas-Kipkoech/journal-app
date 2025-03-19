@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { loginUser } from "@/app/(services)/api";
+import { loginUser } from "@/actions/auth";
 import useFetch from "@/app/hooks/use-fetch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

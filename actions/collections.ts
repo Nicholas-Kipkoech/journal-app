@@ -1,8 +1,9 @@
-"use server";
+// "use server";
 
-export async function getCollections(userId: string) {
+export async function getCollections() {
   try {
-    const response = await fetch(`/api/collection?userId=${userId}`, {
+    const response = await fetch(`http://localhost:3000/api/collection`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
@@ -10,13 +11,13 @@ export async function getCollections(userId: string) {
       cache: "no-store", // Prevent caching stale data
     });
     if (!response.ok) {
-      throw new Error(`Failed to fetch journals: ${response.statusText}`);
+      throw new Error(`Failed to fetch collections: ${response.statusText}`);
     }
     const data = await response.json();
     return data.collections;
   } catch (error) {
     console.error("error", error);
-    throw new Error("Error");
+    return [];
   }
 }
 
@@ -28,7 +29,7 @@ interface Collection {
 
 export async function createCollection(collection: Collection) {
   try {
-    const response = await fetch(`/api/collection`, {
+    const response = await fetch(`http://localhost:3000/api/collection`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,6 +43,6 @@ export async function createCollection(collection: Collection) {
     return data.collections;
   } catch (error) {
     console.error("error", error);
-    throw new Error("Error");
+    return [];
   }
 }
