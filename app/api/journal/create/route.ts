@@ -2,6 +2,7 @@ import { getPixabayImage } from "@/actions/public";
 import { MOODS } from "@/app/lib/moods";
 import { journalSchema } from "@/app/lib/schema";
 import { db } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -51,6 +52,9 @@ export async function POST(req: Request) {
         collectionId,
       },
     });
+
+    // cache the data
+    revalidatePath("/journal");
 
     return NextResponse.json(newEntry, { status: 201 });
   } catch (error) {
