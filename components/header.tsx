@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
-import { FolderOpen, LogOut, PenBox } from "lucide-react";
+import { Book, FolderOpen, LogOut, PenBox } from "lucide-react";
 import { useAuth } from "@/app/context/AuthContext";
 
 const Header = () => {
@@ -9,11 +9,11 @@ const Header = () => {
   return (
     <header className="container mx-auto">
       <nav className="flex justify-between py-6 px-4 items-center ">
-        <Link
-          href={"/"}
-          className="bg-orange-500 text-white h-[2rem] rounded-sm px-2 flex justify-center items-center"
-        >
-          <span>Life Journal</span>
+        <Link href="/">
+          <Button variant={"secondary"}>
+            <Book size={18} />
+            <span className="hidden md:inline">Life Journal</span>
+          </Button>
         </Link>
 
         <div className="flex items-center gap-4">
