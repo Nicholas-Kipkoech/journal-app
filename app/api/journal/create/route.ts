@@ -1,6 +1,6 @@
 import { getPixabayImage } from "@/actions/public";
 import { MOODS } from "@/app/lib/moods";
-import { journalSchema } from "@/app/lib/schema";
+import { journalSchema } from "@/app/lib/schemas";
 import { db } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
