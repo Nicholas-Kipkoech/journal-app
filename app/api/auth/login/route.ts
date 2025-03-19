@@ -52,14 +52,23 @@ export async function POST(req: Request) {
       }
     );
 
-    // Send token as response
-    return NextResponse.json(
-      {
-        message: "Login successful",
-        token,
-      },
+    // Create a response
+    const response = NextResponse.json(
+      { message: "Login successful", success: true },
       { status: 200 }
     );
+
+    // Set the token as an HTTP-only cookie
+    response.cookies.set({
+      name: "accessToken",
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 days in seconds
+    });
+
+    return response;
   } catch (error) {
     console.error("Login error", error);
     return NextResponse.json(

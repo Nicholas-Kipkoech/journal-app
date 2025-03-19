@@ -26,9 +26,8 @@ const SignIn = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (data?.token) {
-      localStorage.setItem("accessToken", data.token);
-      toast.success("success", { description: data.message });
+    if (data?.success) {
+      toast.success("success", { description: data?.message });
       router.push("/dashboard");
     }
   }, [data, router]);

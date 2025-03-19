@@ -1,8 +1,8 @@
+import { verifyAuthToken } from "@/app/lib/auth";
 import { collectionSchema } from "@/app/lib/schemas";
 import { db } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
-import { URL } from "url";
 
 export async function POST(req: Request) {
   try {
@@ -45,27 +45,14 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: "User ID is required" },
-        { status: 400 }
-      );
-    }
-
-    // Check if user exists
-    const user = await db.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    // Access cookies from the request
+    const user = await verifyAuthToken();
 
     // Fetch collections
     const collections = await db.collection.findMany({
-      where: { userId },
+      where: { userId: user.id },
       orderBy: { createdAt: "desc" }, // optional sorting
     });
 
@@ -84,29 +71,22 @@ export async function GET(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
-    const collectionId = searchParams.get("collectionId");
+    const { collectionId } = await req.json();
 
-    if (!userId) {
+    const user = await verifyAuthToken();
+
+    if (!collectionId) {
       return NextResponse.json(
-        { error: "User ID is required" },
+        { error: "Collection ID is required" },
         { status: 400 }
       );
     }
 
-    // Check if user exists
-    const user = await db.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-    let collection;
     // Fetch collections
-    if (collectionId) {
-      collection = await db.collection.findFirst({
-        where: { id: collectionId },
-      });
-    }
+
+    const collection = await db.collection.findFirst({
+      where: { id: collectionId },
+    });
 
     if (!collection) {
       return NextResponse.json(
