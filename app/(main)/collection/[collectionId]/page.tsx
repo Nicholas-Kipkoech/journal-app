@@ -3,12 +3,18 @@ import DeleteCollectionDialog from "./_components/delete-collection";
 import { JournalFilters } from "./_components/journal-filter";
 import { getJournalEntries } from "@/actions/journal";
 
-export default async function CollectionPage({ params }) {
+export default async function CollectionPage({
+  params,
+}: {
+  params: { collectionId: string };
+}) {
   const { collectionId } = await params;
   const entries = await getJournalEntries(collectionId, "");
   const collections =
     collectionId !== "unorganized" ? await getCollections() : null;
-  const collection = collections?.find((c) => c.id === collectionId);
+  const collection = collections?.find(
+    (c: { id: string }) => c.id === collectionId
+  );
 
   return (
     <div className="space-y-6">
