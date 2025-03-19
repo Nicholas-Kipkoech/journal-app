@@ -2,17 +2,14 @@
 
 export async function getJournalEntries(userId: string, collectionId?: string) {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/journals`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId, collectionId }),
-        cache: "no-store", // Prevent caching stale data
-      }
-    );
+    const response = await fetch(`/api/journal/fetch`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, collectionId }),
+      cache: "no-store", // Prevent caching stale data
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch journals: ${response.statusText}`);

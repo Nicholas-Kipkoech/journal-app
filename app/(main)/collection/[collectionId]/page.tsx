@@ -1,4 +1,4 @@
-import { getCollections } from "@/actions/collection";
+import { getCollections } from "@/actions/collections";
 import DeleteCollectionDialog from "./_components/delete-collection";
 import { JournalFilters } from "./_components/journal-filter";
 import { getJournalEntries } from "@/actions/journal";
