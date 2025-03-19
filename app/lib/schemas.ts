@@ -12,6 +12,7 @@ export const journalSchema = z.object({
 });
 
 export const collectionSchema = z.object({
+  userId: z.string(),
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),
 });

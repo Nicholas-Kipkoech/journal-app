@@ -17,6 +17,7 @@ model User {
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
   journalEntries JournalEntry[]
+  collections    Collection[]
 }
 
 model JournalEntry {
@@ -38,7 +39,12 @@ model JournalEntry {
 model Collection {
   id             String         @id @default(uuid())
   name           String         @unique
+  description    String?
+  user           User           @relation(fields: [userId], references: [id])
   journalEntries JournalEntry[]
+  userId         String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 enum Role {
@@ -53,5 +59,6 @@ model JournalInsight {
   wordCount    Int
   themes       String[] // List of detected themes
   createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
   journalEntry JournalEntry @relation(fields: [entryId], references: [id])
 }
