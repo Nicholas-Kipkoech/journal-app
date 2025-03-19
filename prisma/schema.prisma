@@ -22,9 +22,12 @@ model User {
 model JournalEntry {
   id             String          @id @default(uuid())
   title          String
-  content        String
-  categoryId     String?
-  category       Category?       @relation(fields: [categoryId], references: [id])
+  content        String          @db.Text
+  mood           String // References moods.ts constants
+  moodScore      Int // Numeric value from moods.ts for analytics
+  moodImageUrl   String? // Pixabay image URL
+  collectionId   String?
+  collection     Collection?     @relation(fields: [collectionId], references: [id])
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   userId         String
@@ -32,7 +35,7 @@ model JournalEntry {
   journalInsight JournalInsight?
 }
 
-model Category {
+model Collection {
   id             String         @id @default(uuid())
   name           String         @unique
   journalEntries JournalEntry[]
@@ -44,11 +47,11 @@ enum Role {
 }
 
 model JournalInsight {
-  id        String       @id @default(uuid())
-  entryId   String       @unique
-  sentiment Float? // e.g., -1 to 1 for sentiment analysis
-  wordCount Int
-  themes    String[] // List of detected themes
-  createdAt DateTime     @default(now())
-  entry     JournalEntry @relation(fields: [entryId], references: [id])
+  id           String       @id @default(uuid())
+  entryId      String       @unique
+  sentiment    Float? // e.g., -1 to 1 for sentiment analysis
+  wordCount    Int
+  themes       String[] // List of detected themes
+  createdAt    DateTime     @default(now())
+  journalEntry JournalEntry @relation(fields: [entryId], references: [id])
 }
