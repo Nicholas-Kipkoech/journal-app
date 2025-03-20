@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        journal: "bg-orange-500 hover:bg-orange-700 text-white shadow",
+        journal: "bg-[#32a2a8] hover:bg-orange-700 text-white shadow",
         default:
           "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
         destructive:
