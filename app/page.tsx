@@ -10,17 +10,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import TestimonialCarousel from "../components/testimonial-carousel";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { getDailyPrompt } from "./services/public";
-import faqs from "../data/faqs.json";
 
 const features = [
   {
@@ -198,43 +191,6 @@ export default async function LandingPage() {
 
       {/* Testimonials Carousel */}
       <TestimonialCarousel />
-
-      {/* FAQ Section */}
-      <div className="mt-24">
-        <h2 className="text-3xl font-bold text-center text-orange-900 mb-12">
-          Frequently Asked Questions
-        </h2>
-        <Accordion type="single" collapsible className="w-full mx-auto">
-          {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger className="text-orange-900 text-lg">
-                {faq.q}
-              </AccordionTrigger>
-              <AccordionContent className="text-orange-700">
-                {faq.a}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </div>
-
-      {/* CTA Section */}
-      <div className="mt-24">
-        <Card className="bg-gradient-to-r from-orange-100 to-amber-100">
-          <CardContent className="p-12 text-center">
-            <h2 className="text-3xl font-bold text-orange-900 mb-6">
-              Start Reflct-ing on Your Journey Today
-            </h2>
-            <p className="text-lg text-orange-700 mb-8 max-w-2xl mx-auto">
-              Join thousands of writers who have already discovered the power of
-              digital journaling.
-            </p>
-            <Button size="lg" variant="journal" className="animate-bounce">
-              Get Started for Free <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 }
