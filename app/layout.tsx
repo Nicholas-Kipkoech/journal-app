@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/header";
 import { Toaster } from "sonner";
 import { AuthProvider } from "./context/AuthContext";
+import { JournalProvider } from "./context/JournalContext";
 
 const getInter = Inter({
   subsets: ["latin"],
@@ -16,11 +17,13 @@ export default function RootLayout({
   return (
     <html>
       <body className={`${getInter.className} antialiased`}>
-        <AuthProvider>
-          <Toaster richColors position="top-right" />
-          <Header />
-          <main className="min-h-screen">{children}</main>
-        </AuthProvider>
+        <JournalProvider>
+          <AuthProvider>
+            <Toaster richColors position="top-right" />
+            <Header />
+            <main className="min-h-screen">{children}</main>
+          </AuthProvider>
+        </JournalProvider>
       </body>
     </html>
   );

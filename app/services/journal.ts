@@ -1,26 +1,13 @@
 import axios from "axios";
+import { PrivateAxiosUtility } from "./api";
 
-export async function getJournalEntries({
-  collectionId,
-}: { collectionId?: string } = {}) {
-  if (typeof window === "undefined") return null; // Ensure it's client-side
-
-  const token = localStorage.getItem("access_token");
-  if (!token) {
-    console.warn("No access token found.");
-    return null;
-  }
-
-  try {
-    const res = await axios.get("http://localhost:8080/journals", {
-      headers: { Authorization: `Bearer ${token}` },
-      params: collectionId ? { collectionId } : {},
-    });
-    return res.data;
-  } catch (error) {
-    console.error("Error fetching journal entries:", error);
-    throw error;
-  }
+export async function getJournalEntries() {
+  const res = await PrivateAxiosUtility.get("/journals");
+  return res.data;
+}
+export async function getJournalEntry(id: string) {
+  const res = await PrivateAxiosUtility.get(`/journals/${id}`);
+  return res.data;
 }
 
 interface Journal {
@@ -52,7 +39,5 @@ export const createJournalEntry = async (journal: Journal) => {
 };
 
 export async function updateJournalEntry() {}
-
-export async function getJournalEntry() {}
 
 export async function deleteJournalEntry() {}

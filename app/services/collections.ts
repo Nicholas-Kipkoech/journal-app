@@ -1,28 +1,12 @@
 // "use server";
 
-import axios from "axios";
+import { PrivateAxiosUtility } from "./api";
 
 export async function getCollections({
   collectionId,
 }: { collectionId?: string } = {}) {
-  if (typeof window === "undefined") return null; // Ensure it's client-side
-
-  const token = localStorage.getItem("access_token");
-  if (!token) {
-    console.warn("No access token found.");
-    return null;
-  }
-
-  try {
-    const res = await axios.get("http://localhost:8080/collections", {
-      headers: { Authorization: `Bearer ${token}` },
-      params: collectionId ? { collectionId } : {},
-    });
-    return res.data;
-  } catch (error) {
-    console.error("Error fetching journal entries:", error);
-    throw error;
-  }
+  const res = await PrivateAxiosUtility.get("/collections");
+  return res.data;
 }
 
 export async function createCollection(name: string, description: string) {

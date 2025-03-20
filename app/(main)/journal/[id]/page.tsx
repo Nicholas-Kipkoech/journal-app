@@ -1,3 +1,6 @@
+"use client"; // Force client-side execution
+
+import { use, useEffect, useState } from "react";
 import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,14 +10,26 @@ import { getMoodById } from "@/app/lib/moods";
 import EditButton from "./_components/edit-button";
 import { getJournalEntry } from "@/app/services/journal";
 
-export default async function JournalEntryPage({ params }) {
-  const { id } = await params;
-  const entry = await getJournalEntry(id);
+export default function JournalEntryPage({ params }) {
+  const { id } = use(params);
+  const [entry, setEntry] = useState(null);
+
+  useEffect(() => {
+    async function fetchEntry() {
+      const data = await getJournalEntry(id);
+      setEntry(data.journalEntry);
+    }
+    fetchEntry();
+  }, [id]);
+
+  console.log("entry", entry);
+
+  if (!entry) return <p>Loading...</p>;
+
   const mood = getMoodById(entry.mood);
 
   return (
     <>
-      {/* Header with Mood Image */}
       {entry.moodImageUrl && (
         <div className="relative h-48 md:h-64 w-full">
           <Image
@@ -28,7 +43,6 @@ export default async function JournalEntryPage({ params }) {
       )}
 
       <div className="p-6 space-y-6">
-        {/* Header Section */}
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="space-y-1">
@@ -38,7 +52,7 @@ export default async function JournalEntryPage({ params }) {
                 </h1>
               </div>
               <p className="text-gray-500">
-                Created {format(new Date(entry.createdAt), "PPP")}
+                {/* Created {format(new Date(entry?.createdAt), "PPP")} */}
               </p>
             </div>
 
@@ -48,7 +62,6 @@ export default async function JournalEntryPage({ params }) {
             </div>
           </div>
 
-          {/* Tags Section */}
           <div className="flex flex-wrap gap-2">
             {entry.collection && (
               <Link href={`/collection/${entry.collection.id}`}>
@@ -70,7 +83,6 @@ export default async function JournalEntryPage({ params }) {
 
         <hr />
 
-        {/* Content Section */}
         <div className="ql-snow">
           <div
             className="ql-editor"
@@ -78,9 +90,8 @@ export default async function JournalEntryPage({ params }) {
           />
         </div>
 
-        {/* Footer */}
         <div className="text-sm text-gray-500 pt-4 border-t">
-          Last updated {format(new Date(entry.updatedAt), "PPP 'at' p")}
+          {/* Last updated {format(new Date(entry.updatedAt), "PPP 'at' p")} */}
         </div>
       </div>
     </>

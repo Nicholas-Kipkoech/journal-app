@@ -1,15 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-
 import { toast } from "sonner";
 import CollectionForm from "@/components/collection-form";
 import useFetch from "@/app/hooks/use-fetch";
 import { createCollection } from "@/app/services/collections";
 import CollectionPreview from "./collection-preview";
 
-const Collections = ({ collections, entriesByCollection }) => {
-  console.log(entriesByCollection.unorganized.length);
+const Collections = ({ collections, entriesByCollection = {} }) => {
   const [isCollectionDialogOpen, setIsCollectionDialogOpen] = useState(false);
 
   const {
@@ -21,20 +19,15 @@ const Collections = ({ collections, entriesByCollection }) => {
   useEffect(() => {
     if (createdCollection) {
       setIsCollectionDialogOpen(false);
-
       toast.success(`Collection ${createdCollection.name} created!`);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createdCollection, createCollectionLoading]);
 
   const handleCreateCollection = async (data) => {
     createCollectionFn(data);
   };
 
-  if (collections && collections.length === 0) return <></>;
-
-  console.log(entriesByCollection.unorganized);
+  if (!collections || collections.length === 0) return null;
 
   return (
     <section id="collections" className="space-y-6">
@@ -56,12 +49,12 @@ const Collections = ({ collections, entriesByCollection }) => {
         )}
 
         {/* User Collections */}
-        {collections?.map((collection) => (
+        {collections.map((collection) => (
           <CollectionPreview
             key={collection.id}
             id={collection.id}
             name={collection.name}
-            entries={entriesByCollection[collection.id] || []}
+            entries={entriesByCollection?.[collection.id] || []} // ✅ Safe access
           />
         ))}
 
