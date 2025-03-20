@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import useFetch from "@/app/hooks/use-fetch";
-import { getAnalytics } from "@/actions/analytics";
+import { getAnalytics } from "@/app/services/analytics";
 
 const timeOptions = [
   { value: "7d", label: "Last 7 Days" },
@@ -41,6 +41,8 @@ const MoodAnalytics = () => {
     data: analytics,
     fn: fetchAnalytics,
   } = useFetch(getAnalytics);
+
+  console.log("analytics", analytics);
 
   useEffect(() => {
     fetchAnalytics(period);

@@ -5,10 +5,11 @@ import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 import CollectionForm from "@/components/collection-form";
 import useFetch from "@/app/hooks/use-fetch";
-import { createCollection } from "@/actions/collections";
+import { createCollection } from "@/app/services/collections";
 import CollectionPreview from "./collection-preview";
 
-const Collections = ({ collections = [], entriesByCollection }) => {
+const Collections = ({ collections, entriesByCollection }) => {
+  console.log(entriesByCollection.unorganized.length);
   const [isCollectionDialogOpen, setIsCollectionDialogOpen] = useState(false);
 
   const {
@@ -31,7 +32,9 @@ const Collections = ({ collections = [], entriesByCollection }) => {
     createCollectionFn(data);
   };
 
-  if (collections.length === 0) return <></>;
+  if (collections && collections.length === 0) return <></>;
+
+  console.log(entriesByCollection.unorganized);
 
   return (
     <section id="collections" className="space-y-6">
@@ -44,7 +47,7 @@ const Collections = ({ collections = [], entriesByCollection }) => {
         />
 
         {/* Unorganized Collection */}
-        {entriesByCollection?.unorganized?.length > 0 && (
+        {entriesByCollection?.unorganized && (
           <CollectionPreview
             name="Unorganized"
             entries={entriesByCollection.unorganized}

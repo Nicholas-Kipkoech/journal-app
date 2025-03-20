@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { loginUser } from "@/actions/auth";
+import { loginUser } from "@/app/services/auth";
 import useFetch from "@/app/hooks/use-fetch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,8 +26,9 @@ const SignIn = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (data?.success) {
-      toast.success("success", { description: data?.message });
+    if (data?.token) {
+      toast.success("success", { description: "Logged in successfully" });
+      localStorage.setItem("access_token", data.token);
       router.push("/dashboard");
     }
   }, [data, router]);

@@ -1,23 +1,27 @@
 // "use server";
 
-export async function getCollections() {
-  try {
-    const response = await fetch(`http://localhost:3000/api/collection`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+import axios from "axios";
 
-      cache: "no-store", // Prevent caching stale data
+export async function getCollections({
+  collectionId,
+}: { collectionId?: string } = {}) {
+  if (typeof window === "undefined") return null; // Ensure it's client-side
+
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    console.warn("No access token found.");
+    return null;
+  }
+
+  try {
+    const res = await axios.get("http://localhost:8080/collections", {
+      headers: { Authorization: `Bearer ${token}` },
+      params: collectionId ? { collectionId } : {},
     });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch collections: ${response.statusText}`);
-    }
-    const data = await response.json();
-    return data.data;
+    return res.data;
   } catch (error) {
-    console.error("error", error);
-    return [];
+    console.error("Error fetching journal entries:", error);
+    throw error;
   }
 }
 

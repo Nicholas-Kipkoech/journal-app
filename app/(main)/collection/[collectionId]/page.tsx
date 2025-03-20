@@ -1,20 +1,42 @@
-import { getCollections } from "@/actions/collections";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { getCollections } from "@/app/services/collections";
+import { getJournalEntries } from "@/app/services/journal";
 import DeleteCollectionDialog from "./_components/delete-collection";
 import { JournalFilters } from "./_components/journal-filter";
-import { getJournalEntries } from "@/actions/journal";
 
-export default async function CollectionPage({
-  params,
-}: {
-  params: { collectionId: string };
-}) {
-  const { collectionId } = await params;
-  const entries = await getJournalEntries(collectionId, "");
-  const collections =
-    collectionId !== "unorganized" ? await getCollections() : null;
-  const collection = collections?.find(
-    (c: { id: string }) => c.id === collectionId
-  );
+export default function CollectionPage() {
+  const { collectionId } = useParams();
+  const [entries, setEntries] = useState(null);
+  const [collections, setCollections] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        const fetchedEntries = await getJournalEntries(collectionId);
+        setEntries(fetchedEntries);
+
+        if (collectionId !== "unorganized") {
+          const fetchedCollections = await getCollections();
+          setCollections(fetchedCollections);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [collectionId]);
+
+  const collection = collections?.find((c) => c.id === collectionId);
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div className="space-y-6">
@@ -25,20 +47,18 @@ export default async function CollectionPage({
               ? "Unorganized Entries"
               : collection?.name || "Collection"}
           </h1>
-          {collection && (
+          {collection && entries?.journalEntries && (
             <DeleteCollectionDialog
               collection={collection}
-              entriesCount={entries.data.entries.length}
+              entriesCount={entries?.journalEntries.length}
             />
           )}
         </div>
         {collection?.description && (
-          <h2 className="font-extralight pl-1">{collection?.description}</h2>
+          <h2 className="font-extralight pl-1">{collection.description}</h2>
         )}
       </div>
-
-      {/* Client-side Filters Component */}
-      <JournalFilters entries={entries.data.entries} />
+      <JournalFilters entries={entries.journalEntries} />
     </div>
   );
 }

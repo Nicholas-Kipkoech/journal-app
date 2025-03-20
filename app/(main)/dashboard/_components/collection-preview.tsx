@@ -5,6 +5,22 @@ import { formatDistanceToNow } from "date-fns";
 import { Plus } from "lucide-react";
 import { getMoodById } from "@/app/lib/moods";
 
+interface Entry {
+  id: string;
+  title: string;
+  mood: string;
+  createdAt: string;
+}
+
+interface CollectionPreviewProps {
+  id?: string;
+  name?: string;
+  entries?: Entry[];
+  isUnorganized?: boolean;
+  isCreateNew?: boolean;
+  onCreateNew?: () => void;
+}
+
 const colorSchemes = {
   unorganized: {
     bg: "bg-amber-100 hover:bg-amber-50",
@@ -20,20 +36,28 @@ const colorSchemes = {
   },
 };
 
-const FolderTab = ({ colorClass }) => (
+interface FolderTabProps {
+  colorClass: string;
+}
+
+const FolderTab: React.FC<FolderTabProps> = ({ colorClass }) => (
   <div
     className={`absolute inset-x-4 -top-2 h-2 rounded-t-md transform -skew-x-6 transition-colors ${colorClass}`}
   />
 );
 
-const EntryPreview = ({ entry }) => (
+interface EntryPreviewProps {
+  entry: Entry;
+}
+
+const EntryPreview: React.FC<EntryPreviewProps> = ({ entry }) => (
   <div className="bg-white/50 p-2 rounded text-sm truncate">
     <span className="mr-2">{getMoodById(entry.mood)?.emoji}</span>
     {entry.title}
   </div>
 );
 
-const CollectionPreview = ({
+const CollectionPreview: React.FC<CollectionPreviewProps> = ({
   id,
   name,
   entries = [],
