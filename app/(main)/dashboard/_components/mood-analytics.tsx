@@ -126,8 +126,8 @@ const MoodAnalytics = () => {
           </div>
 
           {/* Journal Entry Frequency */}
-          <div className="flex gap-2">
-            <Card className="w-1/2">
+          <div className="flex flex-col md:flex-row gap-2">
+            <Card className="w-full md:w-1/2">
               <CardHeader>
                 <CardTitle>Journal Entry Frequency</CardTitle>
               </CardHeader>
@@ -136,7 +136,7 @@ const MoodAnalytics = () => {
               </CardContent>
             </Card>
 
-            <Card className="w-1/2 ">
+            <Card className="w-full md:w-1/2">
               <CardHeader>
                 <CardTitle>Category distribution</CardTitle>
               </CardHeader>
@@ -145,8 +145,8 @@ const MoodAnalytics = () => {
               </CardContent>
             </Card>
           </div>
-          <div className="flex gap-2">
-            <Card className="w-1/2  ">
+          <div className="flex flex-col md:flex-row gap-2">
+            <Card className="w-full md:w-1/2">
               <CardHeader>
                 <CardTitle>Word count trends over time</CardTitle>
               </CardHeader>
@@ -154,7 +154,7 @@ const MoodAnalytics = () => {
                 <WordCountTrends entries={analytics.data.entries} />
               </CardContent>
             </Card>
-            <Card className="w-1/2">
+            <Card className="w-full md:w-1/2">
               <CardHeader>
                 <CardTitle>Word/phrase frequency analysis cloud</CardTitle>
               </CardHeader>
