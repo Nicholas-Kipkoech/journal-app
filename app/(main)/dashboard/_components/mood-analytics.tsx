@@ -2,18 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
-import { getMoodById, getMoodTrend } from "@/app/lib/moods";
-import { format, parseISO } from "date-fns";
 import MoodAnalyticsSkeleton from "./analytics-loading";
 
 import {
@@ -26,6 +14,11 @@ import {
 import Link from "next/link";
 import useFetch from "@/app/hooks/use-fetch";
 import { getAnalytics } from "@/app/services/analytics";
+import EntryHeatmap from "./entry-heatmap";
+import CategoryPieChart from "./category-pie-chart";
+import { getCollections } from "@/app/services/collections";
+import WordCountTrends from "./word-count-trends";
+import WordFrequencyCloud from "./word-frequency-cloud";
 
 const timeOptions = [
   { value: "7d", label: "Last 7 Days" },
@@ -42,6 +35,8 @@ const MoodAnalytics = () => {
     fn: fetchAnalytics,
   } = useFetch(getAnalytics);
 
+  const { data: collections } = useFetch(getCollections);
+
   console.log("analytics", analytics);
 
   useEffect(() => {
@@ -55,21 +50,6 @@ const MoodAnalytics = () => {
   if (!analytics) return null;
 
   const { timeline, stats } = analytics.data;
-
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload?.length) {
-      return (
-        <div className="bg-white p-4 border rounded-lg shadow-lg">
-          <p className="font-medium">
-            {format(parseISO(label), "MMM d, yyyy")}
-          </p>
-          <p className="text-orange-600">Average Mood: {payload[0].value}</p>
-          <p className="text-blue-600">Entries: {payload[1].value}</p>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <>
@@ -139,64 +119,50 @@ const MoodAnalytics = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold flex items-center gap-2">
-                  {getMoodById(stats.mostFrequentMood)?.emoji}{" "}
-                  {getMoodTrend(stats.averageScore)}
+                  {stats.mostFrequentMood}
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Mood Timeline Chart */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Mood Timeline</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={timeline}
-                    margin={{
-                      top: 5,
-                      right: 30,
-                      left: 20,
-                      bottom: 5,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                      dataKey="date"
-                      tickFormatter={(date) => format(parseISO(date), "MMM d")}
-                    />
-                    <YAxis yAxisId="left" domain={[0, 10]} />
-                    <YAxis
-                      yAxisId="right"
-                      orientation="right"
-                      domain={[0, "auto"]}
-                    />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Legend />
-                    <Line
-                      yAxisId="left"
-                      type="monotone"
-                      dataKey="averageScore"
-                      stroke="#f97316"
-                      name="Average Mood"
-                      strokeWidth={2}
-                    />
-                    <Line
-                      yAxisId="right"
-                      type="monotone"
-                      dataKey="entryCount"
-                      stroke="#3b82f6"
-                      name="Number of Entries"
-                      strokeWidth={2}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Journal Entry Frequency */}
+          <div className="flex gap-2">
+            <Card className="w-1/2">
+              <CardHeader>
+                <CardTitle>Journal Entry Frequency</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <EntryHeatmap timeline={timeline} />
+              </CardContent>
+            </Card>
+
+            <Card className="w-1/2 ">
+              <CardHeader>
+                <CardTitle>Category distribution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CategoryPieChart entries={analytics.data.entries} />
+              </CardContent>
+            </Card>
+          </div>
+          <div className="flex gap-2">
+            <Card className="w-1/2  ">
+              <CardHeader>
+                <CardTitle>Word count trends over time</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <WordCountTrends entries={analytics.data.entries} />
+              </CardContent>
+            </Card>
+            <Card className="w-1/2">
+              <CardHeader>
+                <CardTitle>Word/phrase frequency analysis cloud</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <WordFrequencyCloud entries={analytics.data.entries} />
+              </CardContent>
+            </Card>
+          </div>
         </div>
       )}
     </>

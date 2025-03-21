@@ -44,13 +44,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // log out the user
   const logout = () => {
-    localStorage.removeItem("accessToken");
+    localStorage.removeItem("access_token");
     setAuth({ isAuthenticated: false, user: null, token: null });
   };
 
   // Check token on app load
   useEffect(() => {
-    const storedToken = localStorage.getItem("accessToken");
+    const storedToken = localStorage.getItem("access_token");
 
     if (storedToken && validateToken(storedToken)) {
       const decoded: TokenPayload = jwtDecode(storedToken);
