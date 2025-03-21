@@ -1,8 +1,11 @@
 import axios from "axios";
 import { PrivateAxiosUtility } from "./api";
 
-export async function getJournalEntries() {
-  const res = await PrivateAxiosUtility.get("/journals");
+export async function getJournalEntries(collectionId: string) {
+  const url = collectionId
+    ? `/journals/?collectionId=${collectionId}`
+    : "/journals";
+  const res = await PrivateAxiosUtility.get(url);
   return res.data;
 }
 export async function getJournalEntry(id: string) {

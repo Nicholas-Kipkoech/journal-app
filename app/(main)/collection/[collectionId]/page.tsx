@@ -18,11 +18,12 @@ export default function CollectionPage() {
       try {
         setLoading(true);
         const fetchedEntries = await getJournalEntries(collectionId);
+        console.log("fetchedentries", fetchedEntries, "params", collectionId);
         setEntries(fetchedEntries);
 
         if (collectionId !== "unorganized") {
           const fetchedCollections = await getCollections();
-          setCollections(fetchedCollections);
+          setCollections(fetchedCollections.collections);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -47,10 +48,10 @@ export default function CollectionPage() {
               ? "Unorganized Entries"
               : collection?.name || "Collection"}
           </h1>
-          {collection && entries?.journalEntries && (
+          {collection && entries && (
             <DeleteCollectionDialog
               collection={collection}
-              entriesCount={entries?.journalEntries.length}
+              entriesCount={entries?.length}
             />
           )}
         </div>
@@ -58,7 +59,7 @@ export default function CollectionPage() {
           <h2 className="font-extralight pl-1">{collection.description}</h2>
         )}
       </div>
-      <JournalFilters entries={entries.journalEntries} />
+      <JournalFilters entries={entries} />
     </div>
   );
 }

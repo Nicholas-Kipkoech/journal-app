@@ -2,9 +2,7 @@
 
 import { PrivateAxiosUtility } from "./api";
 
-export async function getCollections({
-  collectionId,
-}: { collectionId?: string } = {}) {
+export async function getCollections() {
   const res = await PrivateAxiosUtility.get("/collections");
   return res.data;
 }

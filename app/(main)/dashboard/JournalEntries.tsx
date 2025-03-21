@@ -16,7 +16,8 @@ const JournalEntries = () => {
     const fetchCollections = async () => {
       try {
         const data = await getCollections();
-        setCollections(data.collections);
+        setCollections(data);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
         setError("Failed to fetch collections entries.");
       } finally {
@@ -32,8 +33,8 @@ const JournalEntries = () => {
   if (!journalEntries) return <p>No journal entries found.</p>;
 
   // Group entries by collection
-  const entriesByCollection = journalEntries?.journalEntries?.reduce(
-    (acc: Record<string, any[]>, entry: any) => {
+  const entriesByCollection = journalEntries?.reduce(
+    (acc: Record<string, unknown[]>, entry: any) => {
       const collectionId = entry?.collectionId || "unorganized";
       if (!acc[collectionId]) {
         acc[collectionId] = [];
