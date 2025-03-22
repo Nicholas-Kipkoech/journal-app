@@ -35,7 +35,7 @@ const useFetch = (cb: any) => {
         error.response.data.errors &&
         Array.isArray(error.response.data.errors)
       ) {
-        error.response.data.errors.forEach((err: string) => toast.error(err));
+        error.response.data.errors.forEach((err) => toast.error(err.msg));
       } else {
         toast.error(error.response.data.error || "An unexpected error occured");
       }

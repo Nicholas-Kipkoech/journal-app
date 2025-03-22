@@ -23,7 +23,7 @@ const SignUp = () => {
       request.email,
       request.password
     );
-    if (!error) {
+    if (error === null) {
       toast.success("account created successfully");
     }
   }
