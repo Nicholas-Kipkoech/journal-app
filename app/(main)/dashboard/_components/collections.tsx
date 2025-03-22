@@ -19,12 +19,12 @@ const Collections = ({ collections, entriesByCollection = {} }) => {
   useEffect(() => {
     if (createdCollection) {
       setIsCollectionDialogOpen(false);
-      toast.success(`Collection ${createdCollection.name} created!`);
+      toast.success(`Collection  created!`);
     }
-  }, [createdCollection, createCollectionLoading]);
+  }, [createdCollection]);
 
   const handleCreateCollection = async (data) => {
-    createCollectionFn(data);
+    createCollectionFn(data.name, data.description);
   };
 
   if (!collections || collections.length === 0) return null;

@@ -1,29 +1,18 @@
-"use client";
-
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header";
-import { Toaster } from "sonner";
-import { AuthProvider } from "./context/AuthContext";
-import { JournalProvider } from "./context/JournalContext";
+import ClientProviders from "./ClientProviders";
 
-const getInter = Inter({
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html>
-      <body className={`${getInter.className} antialiased`}>
-        <JournalProvider>
-          <AuthProvider>
-            <Toaster richColors position="top-right" />
-            <Header />
-            <main className="min-h-screen">{children}</main>
-          </AuthProvider>
-        </JournalProvider>
+    <html lang="en">
+      <body className={`${inter.className} antialiased`}>
+        <ClientProviders>
+          <main className="min-h-screen">{children}</main>
+        </ClientProviders>
       </body>
     </html>
   );

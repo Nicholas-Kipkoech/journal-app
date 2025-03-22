@@ -1,43 +1,40 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { getCollections } from "@/app/services/collections";
 import { getJournalEntries } from "@/app/services/journal";
 import DeleteCollectionDialog from "./_components/delete-collection";
 import { JournalFilters } from "./_components/journal-filter";
+import useFetch from "@/app/hooks/use-fetch";
 
 export default function CollectionPage() {
   const { collectionId } = useParams();
-  const [entries, setEntries] = useState(null);
-  const [collections, setCollections] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+  const {
+    data: entries,
+    loading: entriesLoading,
+    fn: fetchEntries,
+  } = useFetch(getJournalEntries);
+  const {
+    data: collections,
+    loading: collectionsLoading,
+    fn: fetchCollections,
+  } = useFetch(getCollections);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        const fetchedEntries = await getJournalEntries(collectionId);
-        console.log("fetchedentries", fetchedEntries, "params", collectionId);
-        setEntries(fetchedEntries);
+    if (collectionId) {
+      fetchEntries(collectionId); // Fetch journal entries for the collection
 
-        if (collectionId !== "unorganized") {
-          const fetchedCollections = await getCollections();
-          setCollections(fetchedCollections.collections);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
+      if (collectionId !== "unorganized") {
+        fetchCollections(); // Fetch collections only if not "unorganized"
       }
     }
-
-    fetchData();
   }, [collectionId]);
 
   const collection = collections?.find((c) => c.id === collectionId);
 
-  if (loading) return <p>Loading...</p>;
+  if (entriesLoading || collectionsLoading) return <p>Loading...</p>;
 
   return (
     <div className="space-y-6">

@@ -128,17 +128,17 @@ export function JournalFilters({ entries }) {
 
       {/* Results Summary */}
       <div className="text-sm text-gray-500">
-        Showing {filteredEntries.length} of {entries.length} entries
+        Showing {filteredEntries?.length} of {entries?.length} entries
       </div>
 
       {/* Entries List */}
-      {filteredEntries.length === 0 ? (
+      {filteredEntries?.length === 0 ? (
         <div className="text-center p-8">
           <p className="text-gray-500">No entries found</p>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          {filteredEntries.map((entry) => (
+          {filteredEntries?.map((entry) => (
             <EntryCard key={entry.id} entry={entry} />
           ))}
         </div>

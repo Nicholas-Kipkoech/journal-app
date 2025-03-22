@@ -57,7 +57,6 @@ export default function JournalEntryPage() {
     loading: actionLoading,
     fn: actionFn,
     data: actionResult,
-    error,
   } = useFetch(isEditMode ? updateJournalEntry : createJournalEntry);
 
   const {
@@ -129,7 +128,7 @@ export default function JournalEntryPage() {
   );
 
   const handleCreateCollection = async (data) => {
-    createCollectionFn(data);
+    createCollectionFn(data.name, data.description || "");
   };
 
   const isLoading = collectionsLoading || entryLoading || actionLoading;
@@ -211,7 +210,7 @@ export default function JournalEntryPage() {
               <SelectValue placeholder="Choose a collection..." />
             </SelectTrigger>
             <SelectContent>
-              {collections?.collections?.map((collection) => (
+              {collections?.map((collection) => (
                 <SelectItem key={collection.id} value={collection.id}>
                   {collection.name}
                 </SelectItem>
