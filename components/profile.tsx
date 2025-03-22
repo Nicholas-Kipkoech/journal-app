@@ -25,13 +25,17 @@ const Profile = () => {
     }
   }, [auth]);
 
-  const { data, fn: updateUser, loading } = useFetch(updateProfile);
+  const { fn: updateUser, loading } = useFetch(updateProfile);
   const handleUpdate = () => {
-    updateUser(user.firstName, user.lastName, user.password);
-
+    const updatedUser = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      ...(user.password && { password: user.password }), // only update password if it is not empty
+    };
+    updateUser(updatedUser);
     toast.success("profile update successfully");
   };
-  console.log(data);
+
   return (
     <div className="h-auto  text-[14px] flex flex-col gap-2">
       <div>
