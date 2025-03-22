@@ -13,6 +13,7 @@ export async function getJournalEntry(id: string) {
 }
 
 interface Journal {
+  id?: string;
   title: string;
   content: string;
   collectionId?: string;
@@ -23,7 +24,13 @@ export const createJournalEntry = async (journal: Journal) => {
   return res.data;
 };
 
-export async function updateJournalEntry() {}
+export async function updateJournalEntry(journal: Journal) {
+  const res = await PrivateAxiosUtility.patch(
+    `/journals/${journal.id}`,
+    journal
+  );
+  return res.data;
+}
 
 export async function deleteJournalEntry(journalId: string) {
   const res = await PrivateAxiosUtility.delete(`/journals/${journalId}`);

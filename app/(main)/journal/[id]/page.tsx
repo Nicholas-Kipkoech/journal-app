@@ -1,36 +1,36 @@
 "use client"; // Force client-side execution
 
-import { use, useEffect, useState } from "react";
-import { format } from "date-fns";
+import { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import DeleteDialog from "./_components/delete-dialog";
 import EditButton from "./_components/edit-button";
 import { getJournalEntry } from "@/app/services/journal";
+import { useParams } from "next/navigation";
+import useFetch from "@/app/hooks/use-fetch";
 
-export default function JournalEntryPage({ params }) {
-  const { id } = use(params);
-  const [entry, setEntry] = useState(null);
+export default function JournalEntryPage() {
+  const { id } = useParams();
+
+  const {
+    data: entry,
+    fn: fetchJournalEntry,
+    loading,
+  } = useFetch(getJournalEntry);
 
   useEffect(() => {
-    async function fetchEntry() {
-      const data = await getJournalEntry(id);
-      setEntry(data.journalEntry);
-    }
-    fetchEntry();
-  }, [id]);
+    fetchJournalEntry(id);
+  }, []);
 
-  console.log("entry", entry);
-
-  if (!entry) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
 
   return (
     <>
-      {entry.moodImageUrl && (
+      {entry?.moodImageUrl && (
         <div className="relative h-48 md:h-64 w-full">
           <Image
-            src={entry.moodImageUrl}
+            src={entry?.moodImageUrl}
             alt="Mood visualization"
             className="object-contain"
             fill
@@ -45,7 +45,7 @@ export default function JournalEntryPage({ params }) {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <h1 className="text-5xl font-bold gradient-title">
-                  {entry.title}
+                  {entry?.title}
                 </h1>
               </div>
               <p className="text-gray-500">
@@ -60,9 +60,9 @@ export default function JournalEntryPage({ params }) {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {entry.collection && (
-              <Link href={`/collection/${entry.collection.id}`}>
-                <Badge>Collection: {entry.collection.name}</Badge>
+            {entry?.collection && (
+              <Link href={`/collection/${entry?.collection.id}`}>
+                <Badge>Collection: {entry?.collection.name}</Badge>
               </Link>
             )}
           </div>
@@ -73,7 +73,7 @@ export default function JournalEntryPage({ params }) {
         <div className="ql-snow">
           <div
             className="ql-editor"
-            dangerouslySetInnerHTML={{ __html: entry.content }}
+            dangerouslySetInnerHTML={{ __html: entry?.content }}
           />
         </div>
 

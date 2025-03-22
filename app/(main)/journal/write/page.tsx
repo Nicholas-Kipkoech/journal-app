@@ -111,14 +111,27 @@ export default function JournalEntryPage() {
     async (e) => {
       e.preventDefault();
 
-      actionFn({
+      const payload = {
         title,
         content,
-
         collectionId,
+        ...(isEditMode && { id: editId }), // Include ID if updating
+      };
 
-        ...(isEditMode && { id: editId }),
-      });
+      try {
+        await actionFn(payload);
+        toast.success(
+          `Entry ${isEditMode ? "updated" : "created"} successfully!`
+        );
+        router.push(
+          `/collection/${
+            payload.collectionId ? payload.collectionId : "unorganized"
+          }`
+        );
+      } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong! Please try again.");
+      }
     },
     [title, content, collectionId, isEditMode, editId]
   );
