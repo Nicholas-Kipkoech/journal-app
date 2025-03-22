@@ -1,4 +1,4 @@
-import { AxiosUtility } from "./api";
+import { AxiosUtility, PrivateAxiosUtility } from "./api";
 
 export const loginUser = async (email: string, password: string) => {
   const res = await AxiosUtility.post("/auth/login", {
@@ -18,6 +18,19 @@ export const registerUser = async (
     firstName,
     lastName,
     email,
+    password,
+  });
+  return res.data;
+};
+
+export const updateProfile = async (
+  firstName: string,
+  lastName: string,
+  password: string
+) => {
+  const res = await PrivateAxiosUtility.patch("/auth/update", {
+    firstName,
+    lastName,
     password,
   });
   return res.data;
