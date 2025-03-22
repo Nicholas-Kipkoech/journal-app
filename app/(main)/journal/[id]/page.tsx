@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 import useFetch from "@/app/hooks/use-fetch";
 
 export default function JournalEntryPage() {
-  const { id } = useParams();
+  const { id }: { id: string } = useParams();
 
   const {
     data: entry,
@@ -73,7 +73,7 @@ export default function JournalEntryPage() {
         <div className="ql-snow">
           <div
             className="ql-editor"
-            dangerouslySetInnerHTML={{ __html: entry?.content }}
+            dangerouslySetInnerHTML={{ __html: entry?.content || "" }}
           />
         </div>
 

@@ -3,7 +3,20 @@ import { Card, CardContent } from "./ui/card";
 import Link from "next/link";
 import { format } from "date-fns";
 
-const EntryCard = ({ entry }) => {
+interface Entry {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  collection?: {
+    name: string;
+  };
+}
+interface EntryCardProps {
+  entry: Entry;
+}
+
+const EntryCard: React.FC<EntryCardProps> = ({ entry }) => {
   return (
     <Link href={`/journal/${entry.id}`}>
       <Card className="hover:shadow-md transition-shadow">
@@ -11,7 +24,6 @@ const EntryCard = ({ entry }) => {
           <div className="flex items-start justify-between">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">{entry.moodData.emoji}</span>
                 <h3 className="font-semibold text-lg">{entry.title}</h3>
               </div>
               <div

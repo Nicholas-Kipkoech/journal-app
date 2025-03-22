@@ -53,12 +53,14 @@ const Header = () => {
             <Popover>
               <PopoverTrigger>
                 <div className="h-[3rem] w-[3rem] rounded-[50%] border flex justify-center items-center bg-gray-200">
-                  <p className="font-bold text-[1rem] text-black">
-                    {formatUserProfile(
-                      auth.user?.firstName,
-                      auth.user?.lastName
-                    )}
-                  </p>
+                  {auth.user && (
+                    <p className="font-bold text-[1rem] text-black">
+                      {formatUserProfile(
+                        auth.user?.firstName,
+                        auth.user?.lastName
+                      )}
+                    </p>
+                  )}
                 </div>
               </PopoverTrigger>
               <PopoverContent className="bg-white shadow-lg border p-4 rounded-lg">

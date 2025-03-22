@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect } from "react";
@@ -28,7 +29,7 @@ const JournalEntries = () => {
 
   // Group entries by collection
   const entriesByCollection = journalEntries?.reduce(
-    (acc: Record<string, unknown[]>, entry: any) => {
+    (acc: Record<string, any[]>, entry: any) => {
       const collectionId = entry?.collectionId || "unorganized";
       if (!acc[collectionId]) {
         acc[collectionId] = [];

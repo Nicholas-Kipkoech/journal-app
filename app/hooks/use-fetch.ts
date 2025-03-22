@@ -1,20 +1,17 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// Disables TypeScript's explicit 'any' rule, allowing 'any' type usage without warnings.
 
 import { useState } from "react";
-import { toast } from "sonner"; // Importing 'sonner' for toast notifications
+import { toast } from "sonner";
 
 /**
  * Custom hook for handling asynchronous requests.
  * @param cb - A callback function that performs the API request.
  */
-const useFetch = (cb: any) => {
-  const [data, setData] = useState(undefined);
-
-  const [loading, setLoading] = useState<boolean | null>(null);
-
-  const [error, setError] = useState<any | null>(null);
+const useFetch = <T>(cb: (...args: any[]) => Promise<T>) => {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   /**
    * Executes the given callback function and manages state accordingly.
@@ -22,22 +19,25 @@ const useFetch = (cb: any) => {
    */
   const fn = async (...args: any[]) => {
     setLoading(true);
-    setError(null); // Clear previous errors
+    setError(null);
 
     try {
-      const response = await cb(...args); // Execute the provided function
+      const response = await cb(...args);
       setData(response);
       setError(null);
     } catch (error: any) {
-      setError(error);
-      // handle array of errors expecially from validator
+      setError(error.message || "An unexpected error occurred");
+
+      // Handle validation errors (if any)
       if (
-        error.response.data.errors &&
+        error.response?.data?.errors &&
         Array.isArray(error.response.data.errors)
       ) {
         error.response.data.errors.forEach((err: any) => toast.error(err.msg));
       } else {
-        toast.error(error.response.data.error || "An unexpected error occured");
+        toast.error(
+          error.response?.data?.error || "An unexpected error occurred"
+        );
       }
     } finally {
       setLoading(false);

@@ -19,10 +19,21 @@ import { useEffect } from "react";
 import useFetch from "@/app/hooks/use-fetch";
 import { deleteCollection } from "@/app/services/collections";
 
+interface Collection {
+  id: string;
+  name: string;
+  description: string;
+}
+
+interface DeleteCollectionDialogProps {
+  collection: Collection;
+  entriesCount: number;
+}
+
 export default function DeleteCollectionDialog({
   collection,
   entriesCount = 0,
-}) {
+}: DeleteCollectionDialogProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 

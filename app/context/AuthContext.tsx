@@ -22,7 +22,7 @@ type AuthContextType = {
   logout: () => void;
 };
 
-type TokenPayload = {
+export type TokenPayload = {
   user: User;
   exp: number; // Expiration timestamp (Unix format)
 };

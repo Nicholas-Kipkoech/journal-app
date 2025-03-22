@@ -4,7 +4,11 @@ import { useRouter } from "next/navigation";
 import { Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function EditButton({ entryId }) {
+interface EditButtonProps {
+  entryId: string;
+}
+
+export default function EditButton({ entryId }: EditButtonProps) {
   const router = useRouter();
 
   return (

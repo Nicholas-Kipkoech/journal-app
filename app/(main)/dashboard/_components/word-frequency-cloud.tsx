@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 
-const WordFrequencyCloud = ({ entries = [] }) => {
+interface Entry {
+  id: string;
+  title: string;
+  content: string;
+}
+interface WordCloudProps {
+  entries: Entry[];
+}
+
+const WordFrequencyCloud: React.FC<WordCloudProps> = ({ entries }) => {
   // Stopwords to ignore
   const stopwords = new Set([
     "the",
@@ -22,7 +31,7 @@ const WordFrequencyCloud = ({ entries = [] }) => {
   const stripHTML = (text: string) => text.replace(/<\/?[^>]+(>|$)/g, "");
 
   // Extract word frequencies
-  const getWordFrequency = (entries) => {
+  const getWordFrequency = (entries: Entry[]) => {
     if (!Array.isArray(entries) || entries.length === 0) return [];
 
     const wordMap: any = {};
@@ -50,7 +59,7 @@ const WordFrequencyCloud = ({ entries = [] }) => {
   }
 
   // Sort by frequency
-  words.sort((a, b) => b.count - a.count);
+  words.sort((a: any, b: any) => b.count - a.count);
 
   return (
     <div
@@ -62,7 +71,7 @@ const WordFrequencyCloud = ({ entries = [] }) => {
         padding: 2,
       }}
     >
-      {words.map((item, index) => {
+      {words.map((item: any, index) => {
         const fontSize = 12 + item.count * 5; // Scale font size by frequency
         const x = Math.random() * 80 + 10; // Random X position
         const y = Math.random() * 80 + 10; // Random Y position

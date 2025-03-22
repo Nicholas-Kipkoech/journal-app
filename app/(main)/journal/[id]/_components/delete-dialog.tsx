@@ -18,7 +18,11 @@ import { toast } from "sonner";
 import useFetch from "@/app/hooks/use-fetch";
 import { deleteJournalEntry } from "@/app/services/journal";
 
-export default function DeleteDialog({ entryId }) {
+interface DeleteDialogProps {
+  entryId: string;
+}
+
+export default function DeleteDialog({ entryId }: DeleteDialogProps) {
   const router = useRouter();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -32,16 +36,17 @@ export default function DeleteDialog({ entryId }) {
     if (deletedEntry && !isDeleting) {
       setDeleteDialogOpen(false);
       toast.error("Journal entry deleted successfully");
-      router.push(
-        `/collection/${
-          deletedEntry.collectionId ? deletedEntry.collectionId : "unorganized"
-        }`
-      );
+      router.push(`/collection/${deletedEntry?.collectionId ?? "unorganized"}`);
     }
-  }, [deletedEntry, isDeleting]);
+  }, [deletedEntry, isDeleting, router, setDeleteDialogOpen]);
 
   const handleDelete = async () => {
-    await deleteEntryFn(entryId);
+    try {
+      await deleteEntryFn(entryId);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete journal entry.");
+    }
   };
 
   return (

@@ -10,12 +10,25 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const WordCountTrends = ({ entries }) => {
+interface JournalEntry {
+  id: string;
+  content: string;
+  createdAt: string;
+}
+
+interface WordCountTrendsProps {
+  entries: JournalEntry[];
+}
+
+const WordCountTrends: React.FC<WordCountTrendsProps> = ({ entries }) => {
   // Helper function to count words in a text
-  const countWords = (text) => (text ? text.split(/\s+/).length : 0);
+  const countWords = (text: string) =>
+    text ? text.trim().split(/\s+/).length : 0;
 
   // Aggregate word count per date
-  const wordCountData = entries.reduce((acc, entry) => {
+  const wordCountData = entries.reduce<
+    Record<string, { date: string; wordCount: number }>
+  >((acc, entry) => {
     const date = entry.createdAt.split("T")[0]; // Extract date (YYYY-MM-DD)
     const wordCount = countWords(entry.content);
 
@@ -30,7 +43,7 @@ const WordCountTrends = ({ entries }) => {
 
   // Convert object to array for Recharts
   const data = Object.values(wordCountData).sort(
-    (a, b) => new Date(a.date) - new Date(b.date)
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
   return (

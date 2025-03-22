@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -14,19 +15,33 @@ import { Calendar as CalendarIcon, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import EntryCard from "@/components/entry-card";
 
-export function JournalFilters({ entries }) {
+interface Entry {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  collection?: {
+    name: string;
+  };
+}
+
+interface JournalEntriesProps {
+  entries: Entry[] | null;
+}
+
+export function JournalFilters({ entries }: JournalEntriesProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState<any>(null);
   const [filteredEntries, setFilteredEntries] = useState(entries);
 
   // Apply filters whenever filter values or entries change
   useEffect(() => {
-    let filtered = entries;
+    let filtered = entries ?? [];
 
     // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
+      filtered = filtered?.filter(
         (entry) =>
           entry.title.toLowerCase().includes(query) ||
           entry.content.toLowerCase().includes(query)
@@ -58,7 +73,11 @@ export function JournalFilters({ entries }) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full"
-            prefix={<Search className="h-4 w-4 text-gray-400" />}
+            prefix={
+              (
+                <Search className="h-4 w-4 text-gray-400" />
+              ) as unknown as string
+            }
           />
         </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, FormEvent } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
@@ -108,7 +108,7 @@ export default function JournalEntryPage() {
   }, [actionResult, actionLoading]);
 
   const handleSubmit = useCallback(
-    async (e) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
       const payload = {
@@ -136,7 +136,10 @@ export default function JournalEntryPage() {
     [title, content, collectionId, isEditMode, editId]
   );
 
-  const handleCreateCollection = async (data) => {
+  const handleCreateCollection = async (data: {
+    name: string;
+    description: string;
+  }) => {
     createCollectionFn(data.name, data.description || "");
   };
 
@@ -217,7 +220,7 @@ export default function JournalEntryPage() {
           </Button>
           {isEditMode && (
             <Button
-              onClick={() => router.push(`/journal/${existingEntry.id}`)}
+              onClick={() => router.push(`/journal/${existingEntry?.id}`)}
               variant="destructive"
             >
               Cancel

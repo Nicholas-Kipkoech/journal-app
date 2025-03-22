@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export async function getAnalytics(period = "30d") {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getAnalytics(period = "30d"): Promise<any> {
   if (typeof window === "undefined") return null; // Ensure it's client-side
 
   const token = localStorage.getItem("access_token");

@@ -1,25 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { BarLoader } from "react-spinners";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 
-const CollectionForm = ({ onSuccess, loading, open, setOpen }) => {
-  const [formData, setFormData] = useState({ name: "", description: "" });
+interface CollectionFromProps {
+  onSuccess: (data: { id: string; name: string; description: string }) => void;
+  loading: boolean;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}
+
+const CollectionForm: React.FC<CollectionFromProps> = ({
+  onSuccess,
+  loading,
+  open,
+  setOpen,
+}) => {
+  const [formData, setFormData] = useState({
+    id: "",
+    name: "",
+    description: "",
+  });
   const [errors, setErrors] = useState({ name: "", description: "" });
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: "" }); // Clear error on change
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("e", e);
-    const newErrors = {};
+    const newErrors: { name: string; description: string } = {
+      name: "",
+      description: "",
+    };
 
     if (!formData.name.trim()) newErrors.name = "Collection name is required.";
 

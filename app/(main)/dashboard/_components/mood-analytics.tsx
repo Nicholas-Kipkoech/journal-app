@@ -25,14 +25,45 @@ const timeOptions = [
   { value: "30d", label: "Last 30 Days" },
 ];
 
-const MoodAnalytics = () => {
+interface Entry {
+  id: string;
+  content: string;
+  title: string;
+  createdAt: string;
+  collection?: {
+    id: string;
+    name: string;
+  };
+}
+
+interface TimelineData {
+  date: string;
+  entryCount: number;
+}
+
+interface Stats {
+  totalEntries: number;
+  dailyAverage: number;
+  averageScore: number;
+  mostFrequentMood: string;
+}
+
+interface AnalyticsData {
+  data: {
+    entries: Entry[];
+    timeline: TimelineData[];
+    stats: Stats;
+  };
+}
+
+const MoodAnalytics: React.FC = () => {
   const [period, setPeriod] = useState("7d");
 
   const {
     loading,
     data: analytics,
     fn: fetchAnalytics,
-  } = useFetch(getAnalytics);
+  } = useFetch<AnalyticsData>(getAnalytics);
 
   useEffect(() => {
     fetchAnalytics(period);

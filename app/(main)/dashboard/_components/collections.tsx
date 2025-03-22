@@ -21,7 +21,7 @@ interface Entry {
 }
 
 interface CollectionProps {
-  collections: Collection[];
+  collections: Collection[] | null;
   entriesByCollection?: Record<string, Entry[]>;
 }
 
@@ -75,7 +75,7 @@ const Collections: React.FC<CollectionProps> = ({
             key={collection.id}
             id={collection.id}
             name={collection.name}
-            entries={entriesByCollection?.[collection.id] || []} // ✅ Safe access
+            entries={entriesByCollection?.[collection?.id] || []} // ✅ Safe access
           />
         ))}
 

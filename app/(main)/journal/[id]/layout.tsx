@@ -2,7 +2,11 @@ import Link from "next/link";
 import { Suspense } from "react";
 import Loading from "./loading";
 
-export default function EntryLayout({ children }) {
+export default function EntryLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="px-4 py-8">
       <div className="mb-8">
