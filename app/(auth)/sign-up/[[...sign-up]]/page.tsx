@@ -4,9 +4,10 @@ import { registerUser } from "@/app/services/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const SignUp = () => {
-  const { fn: createUser, loading } = useFetch(registerUser);
+  const { fn: createUser, loading, error } = useFetch(registerUser);
 
   const [request, setRequest] = useState({
     firstName: "",
@@ -22,6 +23,9 @@ const SignUp = () => {
       request.email,
       request.password
     );
+    if (!error) {
+      toast.success("account created successfully");
+    }
   }
 
   return (
