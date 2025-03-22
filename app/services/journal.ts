@@ -25,4 +25,7 @@ export const createJournalEntry = async (journal: Journal) => {
 
 export async function updateJournalEntry() {}
 
-export async function deleteJournalEntry() {}
+export async function deleteJournalEntry(journalId: string) {
+  const res = await PrivateAxiosUtility.delete(`/journals/${journalId}`);
+  return res.data;
+}

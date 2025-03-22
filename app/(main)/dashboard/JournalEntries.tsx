@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Collections from "./_components/collections";
 import { getCollections } from "@/app/services/collections";
 import { useJournals } from "@/app/context/JournalContext";

@@ -27,7 +27,7 @@ const Collections = ({ collections, entriesByCollection = {} }) => {
     createCollectionFn(data.name, data.description);
   };
 
-  if (!collections || collections.length === 0) return null;
+  // if (!collections || collections.length === 0) return null;
 
   return (
     <section id="collections" className="space-y-6">
@@ -49,7 +49,7 @@ const Collections = ({ collections, entriesByCollection = {} }) => {
         )}
 
         {/* User Collections */}
-        {collections.map((collection) => (
+        {collections?.map((collection) => (
           <CollectionPreview
             key={collection.id}
             id={collection.id}
