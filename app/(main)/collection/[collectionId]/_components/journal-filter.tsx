@@ -85,7 +85,7 @@ export function JournalFilters({ entries }) {
           </PopoverContent>
         </Popover>
 
-        {(searchQuery || selectedMood || date) && (
+        {(searchQuery || date) && (
           <Button
             variant="ghost"
             onClick={clearFilters}

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export type User = {
   email: string;
@@ -9,6 +9,7 @@ export type User = {
   lastName: string;
   role: string;
 };
+
 type AuthState = {
   isAuthenticated: boolean;
   user: User | null;
@@ -36,28 +37,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     token: null,
   });
 
-  //  check token validity
+  // Check if token is still valid
   const validateToken = (token: string | null) => {
     if (!token) return false;
 
     try {
       const decoded: TokenPayload = jwtDecode(token);
-      const isExpired = decoded.exp * 1000 < Date.now(); // Convert to milliseconds
-      return !isExpired;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      return decoded.exp * 1000 > Date.now(); // Token must not be expired
     } catch (error) {
+      console.error(error);
       return false;
     }
   };
+  const pathname = usePathname();
 
-  // log out the user
+  // Logout user and redirect
   const logout = () => {
     localStorage.removeItem("access_token");
     setAuth({ isAuthenticated: false, user: null, token: null });
-    router.push("/");
+
+    // Ensure navigation happens after state updates
+    setTimeout(() => {
+      if (pathname !== "/") router.push("/");
+    }, 0);
   };
 
-  // Check token on app load
+  // Check token validity on app load
   useEffect(() => {
     const storedToken = localStorage.getItem("access_token");
 
@@ -70,7 +75,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         token: storedToken,
       });
     } else {
-      logout();
+      localStorage.removeItem("access_token"); // Prevent infinite logout loop
     }
   }, []);
 

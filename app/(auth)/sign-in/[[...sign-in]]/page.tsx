@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { TokenPayload, useAuth } from "@/app/context/AuthContext";
+import { jwtDecode } from "jwt-decode";
 
 const SignIn = () => {
   const [request, setRequest] = useState({
@@ -15,27 +17,39 @@ const SignIn = () => {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const { data, loading, fn: login }: any = useFetch(loginUser);
+  const { setAuth } = useAuth(); // Access Auth Context
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await login(request.email, request.password);
   };
 
-  // for navigation
-  const router = useRouter();
-
   useEffect(() => {
     if (data?.token) {
-      toast.success("success", { description: "Logged in successfully" });
+      toast.success("Success", { description: "Logged in successfully" });
+
       localStorage.setItem("access_token", data.token);
+
+      // Decode token & update Auth Context
+      const decodedUser: TokenPayload = jwtDecode(data.token);
+      setAuth({
+        isAuthenticated: true,
+        user: decodedUser.user,
+        token: data.token,
+      });
+
+      // Navigate to dashboard
       router.push("/dashboard");
     }
-  }, [data, router]);
+  }, [data, router, setAuth]);
 
   return (
     <div className="">
-      <span className="flex  justify-center font-bold text-[1.8rem] my-2">
+      <span className="flex justify-center font-bold text-[1.8rem] my-2">
         Sign In
       </span>
 
@@ -48,26 +62,36 @@ const SignIn = () => {
           <Input
             type="email"
             placeholder="Email"
+            required
             value={request.email}
             onChange={(e) => setRequest({ ...request, email: e.target.value })}
-            className="w-[25rem] h-[2.5rem]"
+            className="w-[20rem] h-[2.5rem]"
           />
         </div>
         <div>
           <label>Password</label>
           <Input
-            type="text"
+            type={showPassword ? "text" : "password"}
+            required
             value={request.password}
             onChange={(e) =>
               setRequest({ ...request, password: e.target.value })
             }
-            placeholder="Last Name"
-            className="w-[25rem] h-[2.5rem]"
+            placeholder="Password"
+            className="w-[20rem] h-[2.5rem]"
           />
         </div>
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={showPassword}
+            onChange={() => setShowPassword(!showPassword)}
+          />
+          <p className="text-[13px]">Show password</p>
+        </div>
 
-        <Button type="submit" className="bg-orange-500">
-          {loading ? "loggin in..." : "Continue"}
+        <Button type="submit" variant={"journal"}>
+          {loading ? "Logging in..." : "Continue"}
         </Button>
       </form>
     </div>

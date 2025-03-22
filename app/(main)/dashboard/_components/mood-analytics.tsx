@@ -16,7 +16,6 @@ import useFetch from "@/app/hooks/use-fetch";
 import { getAnalytics } from "@/app/services/analytics";
 import EntryHeatmap from "./entry-heatmap";
 import CategoryPieChart from "./category-pie-chart";
-import { getCollections } from "@/app/services/collections";
 import WordCountTrends from "./word-count-trends";
 import WordFrequencyCloud from "./word-frequency-cloud";
 
@@ -34,10 +33,6 @@ const MoodAnalytics = () => {
     data: analytics,
     fn: fetchAnalytics,
   } = useFetch(getAnalytics);
-
-  const { data: collections } = useFetch(getCollections);
-
-  console.log("analytics", analytics);
 
   useEffect(() => {
     fetchAnalytics(period);

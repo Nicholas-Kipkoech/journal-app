@@ -1,7 +1,9 @@
+"use client";
+import withAuth from "@/app/hoc/authGuard";
 import MoodAnalytics from "./_components/mood-analytics";
 import JournalEntries from "./JournalEntries";
 
-const Dashboard = async () => {
+const Dashboard = () => {
   return (
     <div className="px-4 py-8 space-y-8">
       {/* Analytics Section */}
@@ -14,4 +16,4 @@ const Dashboard = async () => {
   );
 };
 
-export default Dashboard;
+export default withAuth(Dashboard);

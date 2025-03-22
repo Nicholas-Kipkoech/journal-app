@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 
 const WordFrequencyCloud = ({ entries = [] }) => {
@@ -17,17 +18,20 @@ const WordFrequencyCloud = ({ entries = [] }) => {
     "for",
   ]);
 
+  // Function to check if a word contains HTML tags
+  const containsHTML = (word: string) => /<\/?[a-z][\s\S]*>/i.test(word);
+
   // Extract word frequencies
   const getWordFrequency = (entries) => {
     if (!Array.isArray(entries) || entries.length === 0) return [];
 
-    const wordMap = {};
+    const wordMap: any = {};
     entries.forEach((entry) => {
       if (!entry || !entry.content) return;
 
       const words = entry.content.toLowerCase().match(/\b\w+\b/g) || [];
-      words.forEach((word) => {
-        if (!stopwords.has(word)) {
+      words.forEach((word: string) => {
+        if (!stopwords.has(word) && !containsHTML(word)) {
           wordMap[word] = (wordMap[word] || 0) + 1;
         }
       });
