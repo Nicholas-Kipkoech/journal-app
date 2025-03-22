@@ -1,13 +1,28 @@
+"use client";
 import useFetch from "@/app/hooks/use-fetch";
 import { registerUser } from "@/app/services/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React from "react";
+import React, { useState } from "react";
 
 const SignUp = () => {
-  const { data, fn, loading, error } = useFetch(registerUser);
+  const { fn: createUser, loading } = useFetch(registerUser);
 
-  function handleRegisterUser() {}
+  const [request, setRequest] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  function handleRegisterUser() {
+    createUser(
+      request.firstName,
+      request.lastName,
+      request.email,
+      request.password
+    );
+  }
 
   return (
     <div className="">
@@ -20,6 +35,10 @@ const SignUp = () => {
           <label>First Name</label>
           <Input
             name=""
+            value={request.firstName}
+            onChange={(e) =>
+              setRequest({ ...request, firstName: e.target.value })
+            }
             placeholder="First Name"
             className="w-[20rem] h-[2.5rem]"
           />
@@ -30,6 +49,10 @@ const SignUp = () => {
             name=""
             placeholder="Last Name"
             className="w-[20rem] h-[2.5rem]"
+            value={request.lastName}
+            onChange={(e) =>
+              setRequest({ ...request, lastName: e.target.value })
+            }
           />
         </div>
         <div>
@@ -39,6 +62,8 @@ const SignUp = () => {
             type="email"
             placeholder="Email"
             className="w-[20rem] h-[2.5rem]"
+            value={request.email}
+            onChange={(e) => setRequest({ ...request, email: e.target.value })}
           />
         </div>
         <div>
@@ -48,11 +73,15 @@ const SignUp = () => {
             type="password"
             placeholder="Password"
             className="w-[20rem] h-[2.5rem]"
+            value={request.password}
+            onChange={(e) =>
+              setRequest({ ...request, password: e.target.value })
+            }
           />
         </div>
 
         <Button variant={"journal"} onClick={handleRegisterUser}>
-          Continue
+          {loading ? "Signing up..." : "Continue"}
         </Button>
       </div>
     </div>
