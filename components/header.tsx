@@ -4,8 +4,25 @@ import { Button } from "./ui/button";
 import { Book, FolderOpen, LogOut, PenBox } from "lucide-react";
 import { useAuth } from "@/app/context/AuthContext";
 
+import Profile from "./profile";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+
+function formatUserProfile(
+  firstName: string | null,
+  lastName: string | null
+): string | null {
+  if (firstName && lastName) {
+    return (
+      firstName.split("").slice(0, 1).join("") +
+      lastName.split("").slice(0, 1).join("")
+    );
+  }
+  return "NN";
+}
+
 const Header = () => {
   const { auth } = useAuth();
+
   return (
     <header className="container mx-auto">
       <nav className="flex justify-between py-6 px-4 items-center ">
@@ -33,10 +50,21 @@ const Header = () => {
             </Button>
           </Link>
           {auth.isAuthenticated ? (
-            <Button variant={"destructive"}>
-              <LogOut size={18} />
-              <span className="hidden md:inline">Logout</span>
-            </Button>
+            <Popover>
+              <PopoverTrigger>
+                <div className="h-[3rem] w-[3rem] rounded-[50%] border flex justify-center items-center bg-gray-200">
+                  <p className="font-bold text-[1rem] text-black">
+                    {formatUserProfile(
+                      auth.user?.firstName,
+                      auth.user?.lastName
+                    )}
+                  </p>
+                </div>
+              </PopoverTrigger>
+              <PopoverContent className="bg-white shadow-lg border p-4 rounded-lg">
+                <Profile />
+              </PopoverContent>
+            </Popover>
           ) : (
             <Link href="/sign-in">
               <Button variant={"journal"}>

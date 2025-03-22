@@ -1,13 +1,7 @@
-"use client";
 import React from "react";
-import { JournalProvider } from "../context/JournalContext";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <JournalProvider>
-      <div className="mx-auto container">{children}</div>;
-    </JournalProvider>
-  );
+  return <div className="mx-auto container">{children}</div>;
 };
 
 export default DashboardLayout;

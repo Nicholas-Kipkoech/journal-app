@@ -7,7 +7,6 @@ import { Plus } from "lucide-react";
 interface Entry {
   id: string;
   title: string;
-  mood: string;
   createdAt: string;
 }
 

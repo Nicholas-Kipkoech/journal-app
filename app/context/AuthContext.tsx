@@ -1,9 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import { useRouter } from "next/navigation";
 
+export type User = {
+  email: string;
+  firstName: string;
+  id: string;
+  lastName: string;
+  role: string;
+};
 type AuthState = {
   isAuthenticated: boolean;
-  user: { id: string; name: string } | null;
+  user: User | null;
   token: string | null;
 };
 
@@ -14,14 +22,14 @@ type AuthContextType = {
 };
 
 type TokenPayload = {
-  id: string;
-  name: string;
+  user: User;
   exp: number; // Expiration timestamp (Unix format)
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
   const [auth, setAuth] = useState<AuthState>({
     isAuthenticated: false,
     user: null,
@@ -46,6 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     localStorage.removeItem("access_token");
     setAuth({ isAuthenticated: false, user: null, token: null });
+    router.push("/");
   };
 
   // Check token on app load
@@ -54,9 +63,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (storedToken && validateToken(storedToken)) {
       const decoded: TokenPayload = jwtDecode(storedToken);
+
       setAuth({
         isAuthenticated: true,
-        user: { id: decoded.id, name: decoded.name },
+        user: decoded.user,
         token: storedToken,
       });
     } else {
