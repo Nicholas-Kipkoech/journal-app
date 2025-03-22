@@ -3,6 +3,7 @@ import useFetch from "@/app/hooks/use-fetch";
 import { registerUser } from "@/app/services/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
@@ -87,6 +88,16 @@ const SignUp = () => {
         <Button variant={"journal"} onClick={handleRegisterUser}>
           {loading ? "Signing up..." : "Continue"}
         </Button>
+
+        <div className="flex justify-center text-[13px] gap-1">
+          <p>Already have an account?</p>
+          <Link
+            href={"/sign-in"}
+            className="cursor-pointer text-blue-600 font-bold"
+          >
+            Sign In
+          </Link>
+        </div>
       </div>
     </div>
   );
