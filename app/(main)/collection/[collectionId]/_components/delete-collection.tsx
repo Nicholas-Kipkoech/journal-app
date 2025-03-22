@@ -17,8 +17,7 @@ import { toast } from "sonner";
 
 import { useEffect } from "react";
 import useFetch from "@/app/hooks/use-fetch";
-
-function deleteCollection() {}
+import { deleteCollection } from "@/app/services/collections";
 
 export default function DeleteCollectionDialog({
   collection,

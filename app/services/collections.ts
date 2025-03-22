@@ -14,3 +14,10 @@ export async function createCollection(name: string, description: string) {
   });
   return res.data;
 }
+
+export async function deleteCollection(collectionId: string) {
+  const res = await PrivateAxiosUtility.delete(
+    `/collections?collectionId=${collectionId}`
+  );
+  return res.data;
+}
