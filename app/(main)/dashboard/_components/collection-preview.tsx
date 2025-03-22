@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { Plus } from "lucide-react";
-import { getMoodById } from "@/app/lib/moods";
 
 interface Entry {
   id: string;
@@ -51,10 +50,7 @@ interface EntryPreviewProps {
 }
 
 const EntryPreview: React.FC<EntryPreviewProps> = ({ entry }) => (
-  <div className="bg-white/50 p-2 rounded text-sm truncate">
-    <span className="mr-2">{getMoodById(entry.mood)?.emoji}</span>
-    {entry.title}
-  </div>
+  <div className="bg-white/50 p-2 rounded text-sm truncate">{entry.title}</div>
 );
 
 const CollectionPreview: React.FC<CollectionPreviewProps> = ({

@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import DeleteDialog from "./_components/delete-dialog";
-import { getMoodById } from "@/app/lib/moods";
 import EditButton from "./_components/edit-button";
 import { getJournalEntry } from "@/app/services/journal";
 
@@ -25,8 +24,6 @@ export default function JournalEntryPage({ params }) {
   console.log("entry", entry);
 
   if (!entry) return <p>Loading...</p>;
-
-  const mood = getMoodById(entry.mood);
 
   return (
     <>
@@ -68,16 +65,6 @@ export default function JournalEntryPage({ params }) {
                 <Badge>Collection: {entry.collection.name}</Badge>
               </Link>
             )}
-            <Badge
-              variant="outline"
-              style={{
-                backgroundColor: `var(--${mood?.color}-50)`,
-                color: `var(--${mood?.color}-700)`,
-                borderColor: `var(--${mood?.color}-200)`,
-              }}
-            >
-              Feeling {mood?.label}
-            </Badge>
           </div>
         </div>
 

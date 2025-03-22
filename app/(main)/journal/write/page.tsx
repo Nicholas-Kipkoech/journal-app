@@ -16,7 +16,6 @@ import { Loader2 } from "lucide-react";
 import { BarLoader } from "react-spinners";
 import { toast } from "sonner";
 import CollectionForm from "@/components/collection-form";
-import { getMoodById, MOODS } from "@/app/lib/moods";
 import { createCollection, getCollections } from "@/app/services/collections";
 import {
   createJournalEntry,
@@ -35,7 +34,6 @@ export default function JournalEntryPage() {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [mood, setMood] = useState("");
   const [collectionId, setCollectionId] = useState("");
   const [isCollectionDialogOpen, setIsCollectionDialogOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -81,7 +79,6 @@ export default function JournalEntryPage() {
     if (isEditMode && existingEntry) {
       setTitle(existingEntry.title || "");
       setContent(existingEntry.content || "");
-      setMood(existingEntry.mood || "");
       setCollectionId(existingEntry.collectionId || "");
     }
   }, [isEditMode, existingEntry]);
@@ -113,18 +110,17 @@ export default function JournalEntryPage() {
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-      const moodData = getMoodById(mood);
+
       actionFn({
         title,
         content,
-        mood,
+
         collectionId,
-        moodScore: moodData?.score,
-        moodQuery: moodData?.pixabayQuery,
+
         ...(isEditMode && { id: editId }),
       });
     },
-    [title, content, mood, collectionId, isEditMode, editId]
+    [title, content, collectionId, isEditMode, editId]
   );
 
   const handleCreateCollection = async (data) => {
@@ -156,27 +152,6 @@ export default function JournalEntryPage() {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">How are you feeling?</label>
-          <Select value={mood} onValueChange={setMood}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a mood..." />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.values(MOODS).map((m) => (
-                <SelectItem key={m.id} value={m.id}>
-                  <span className="flex items-center gap-2">
-                    {m.emoji} {m.label}
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
-            {getMoodById(mood)?.prompt ?? "Write your thoughts..."}
-          </label>
           <ReactQuill
             readOnly={isLoading}
             theme="snow"
