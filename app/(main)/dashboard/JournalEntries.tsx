@@ -3,22 +3,23 @@
 import { useEffect } from "react";
 import Collections from "./_components/collections";
 import { getCollections } from "@/app/services/collections";
-import { useJournals } from "@/app/context/JournalContext";
 import useFetch from "@/app/hooks/use-fetch";
+import { getJournalEntries } from "@/app/services/journal";
 
 const JournalEntries = () => {
-  const { journalEntries } = useJournals();
-
   // fetch collections
+  const { data: collections, fn: fetchColletions } = useFetch(getCollections);
+
   const {
-    data: collections,
+    data: journalEntries,
     loading,
     error,
-    fn: fetchColletions,
-  } = useFetch(getCollections);
+    fn: fetchJournalEntries,
+  } = useFetch(getJournalEntries);
 
   useEffect(() => {
     fetchColletions();
+    fetchJournalEntries();
   }, []);
 
   if (loading) return <p>Loading...</p>;

@@ -16,7 +16,6 @@ import EntryCard from "@/components/entry-card";
 
 export function JournalFilters({ entries }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedMood, setSelectedMood] = useState("");
   const [date, setDate] = useState(null);
   const [filteredEntries, setFilteredEntries] = useState(entries);
 
@@ -34,11 +33,6 @@ export function JournalFilters({ entries }) {
       );
     }
 
-    // Apply mood filter
-    if (selectedMood) {
-      filtered = filtered.filter((entry) => entry.mood === selectedMood);
-    }
-
     // Apply date filter
     if (date) {
       filtered = filtered.filter((entry) =>
@@ -47,11 +41,10 @@ export function JournalFilters({ entries }) {
     }
 
     setFilteredEntries(filtered);
-  }, [entries, searchQuery, selectedMood, date]);
+  }, [entries, searchQuery, date]);
 
   const clearFilters = () => {
     setSearchQuery("");
-    setSelectedMood("");
     setDate(null);
   };
 
