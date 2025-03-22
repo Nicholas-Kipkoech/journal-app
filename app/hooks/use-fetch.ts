@@ -30,7 +30,15 @@ const useFetch = (cb: any) => {
       setError(null);
     } catch (error: any) {
       setError(error);
-      toast.error(error.message);
+      // handle array of errors expecially from validator
+      if (
+        error.response.data.errors &&
+        Array.isArray(error.response.data.errors)
+      ) {
+        error.response.data.errors.forEach((err: string) => toast.error(err));
+      } else {
+        toast.error(error.response.data.error || "An unexpected error occured");
+      }
     } finally {
       setLoading(false);
     }
