@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { TokenPayload, useAuth } from "@/app/context/AuthContext";
 import { jwtDecode } from "jwt-decode";
+import Link from "next/link";
 
 const SignIn = () => {
   const [request, setRequest] = useState({
@@ -93,6 +94,16 @@ const SignIn = () => {
         <Button type="submit" variant={"journal"}>
           {loading ? "Logging in..." : "Continue"}
         </Button>
+
+        <div className="flex text-[13px] justify-center gap-1">
+          <p>Dont have an account yet?</p>
+          <Link
+            href={"/sign-up"}
+            className="text-blue-600 font-bold cursor-pointer"
+          >
+            Sign Up
+          </Link>
+        </div>
       </form>
     </div>
   );
