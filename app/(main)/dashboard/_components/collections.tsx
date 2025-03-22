@@ -7,7 +7,28 @@ import useFetch from "@/app/hooks/use-fetch";
 import { createCollection } from "@/app/services/collections";
 import CollectionPreview from "./collection-preview";
 
-const Collections = ({ collections, entriesByCollection = {} }) => {
+interface Collection {
+  id: string;
+  name: string;
+  description: string;
+}
+
+interface Entry {
+  id: string;
+  title: string;
+  createdAt: string;
+  content: string;
+}
+
+interface CollectionProps {
+  collections: Collection[];
+  entriesByCollection?: Record<string, Entry[]>;
+}
+
+const Collections: React.FC<CollectionProps> = ({
+  collections,
+  entriesByCollection = {},
+}) => {
   const [isCollectionDialogOpen, setIsCollectionDialogOpen] = useState(false);
 
   const {
@@ -23,7 +44,7 @@ const Collections = ({ collections, entriesByCollection = {} }) => {
     }
   }, [createdCollection]);
 
-  const handleCreateCollection = async (data) => {
+  const handleCreateCollection = async (data: Collection) => {
     createCollectionFn(data.name, data.description);
   };
 
