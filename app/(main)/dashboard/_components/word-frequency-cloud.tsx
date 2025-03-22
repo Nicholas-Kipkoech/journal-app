@@ -18,8 +18,8 @@ const WordFrequencyCloud = ({ entries = [] }) => {
     "for",
   ]);
 
-  // Function to check if a word contains HTML tags
-  const containsHTML = (word: string) => /<\/?[a-z][\s\S]*>/i.test(word);
+  // Function to remove HTML tags from a string
+  const stripHTML = (text: string) => text.replace(/<\/?[^>]+(>|$)/g, "");
 
   // Extract word frequencies
   const getWordFrequency = (entries) => {
@@ -29,9 +29,12 @@ const WordFrequencyCloud = ({ entries = [] }) => {
     entries.forEach((entry) => {
       if (!entry || !entry.content) return;
 
-      const words = entry.content.toLowerCase().match(/\b\w+\b/g) || [];
+      // Strip HTML before extracting words
+      const cleanText = stripHTML(entry.content);
+      const words = cleanText.toLowerCase().match(/\b\w+\b/g) || [];
+
       words.forEach((word: string) => {
-        if (!stopwords.has(word) && !containsHTML(word)) {
+        if (!stopwords.has(word)) {
           wordMap[word] = (wordMap[word] || 0) + 1;
         }
       });
