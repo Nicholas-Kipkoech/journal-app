@@ -23,15 +23,19 @@ export const registerUser = async (
   return res.data;
 };
 
-export const updateProfile = async (
-  firstName: string,
-  lastName: string,
-  password: string
-) => {
+export const updateProfile = async ({
+  firstName,
+  lastName,
+  password,
+}: {
+  firstName: string;
+  lastName: string;
+  password: string;
+}) => {
   const res = await PrivateAxiosUtility.patch("/auth/update", {
     firstName,
     lastName,
-    password,
+    ...(password && { password }), // Only include password if it's not empty
   });
   return res.data;
 };

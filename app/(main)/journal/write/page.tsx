@@ -95,6 +95,7 @@ export default function JournalEntryPage() {
 
   // Handle successful form submission
   useEffect(() => {
+    console.log(actionResult);
     if (actionResult && !actionLoading) {
       router.push(
         `/collection/${
