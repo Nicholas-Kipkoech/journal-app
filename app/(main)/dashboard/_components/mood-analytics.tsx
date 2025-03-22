@@ -18,6 +18,7 @@ import EntryHeatmap from "./entry-heatmap";
 import CategoryPieChart from "./category-pie-chart";
 import WordCountTrends from "./word-count-trends";
 import WordFrequencyCloud from "./word-frequency-cloud";
+import EntryLengthAverages from "./entry-length-avg";
 
 const timeOptions = [
   { value: "7d", label: "Last 7 Days" },
@@ -30,7 +31,7 @@ interface Entry {
   content: string;
   title: string;
   createdAt: string;
-  collection?: {
+  collection: {
     id: string;
     name: string;
   };
@@ -186,6 +187,14 @@ const MoodAnalytics: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <WordFrequencyCloud entries={analytics.data.entries} />
+              </CardContent>
+            </Card>
+            <Card className="w-full md:w-1/2">
+              <CardHeader>
+                <CardTitle>Word/phrase frequency analysis cloud</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <EntryLengthAverages entries={analytics.data.entries} />
               </CardContent>
             </Card>
           </div>

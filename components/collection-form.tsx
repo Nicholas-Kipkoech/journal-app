@@ -8,7 +8,8 @@ import { BarLoader } from "react-spinners";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 
 interface CollectionFromProps {
-  onSuccess: (data: { id: string; name: string; description: string }) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSuccess: (data: any) => void;
   loading: boolean;
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -36,11 +37,8 @@ const CollectionForm: React.FC<CollectionFromProps> = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("e", e);
-    const newErrors: { name: string; description: string } = {
-      name: "",
-      description: "",
-    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const newErrors: any = {};
 
     if (!formData.name.trim()) newErrors.name = "Collection name is required.";
 

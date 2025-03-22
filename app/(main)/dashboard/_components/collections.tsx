@@ -45,7 +45,7 @@ const Collections: React.FC<CollectionProps> = ({
   }, [createdCollection]);
 
   const handleCreateCollection = async (data: Collection) => {
-    createCollectionFn(data.name, data.description);
+    createCollectionFn({ name: data.name, description: data.description });
   };
 
   // if (!collections || collections.length === 0) return null;

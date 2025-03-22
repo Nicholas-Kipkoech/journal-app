@@ -16,14 +16,18 @@ export async function getCollections(): Promise<Collection[]> {
   return res.data as Promise<Collection[]>;
 }
 
-export async function createCollection(
-  name: string,
-  description: string
-): Promise<Collection> {
+export async function createCollection({
+  name,
+  description,
+}: {
+  name: string;
+  description: string;
+}): Promise<Collection> {
   const res = await PrivateAxiosUtility.post("/collections", {
     name,
     description,
   });
+  console.log(res.data);
   return res.data as Promise<Collection>;
 }
 

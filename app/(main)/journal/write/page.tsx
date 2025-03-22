@@ -89,7 +89,7 @@ export default function JournalEntryPage() {
       setIsCollectionDialogOpen(false);
       fetchCollections();
       setCollectionId(createdCollection.id);
-      toast.success(`Collection ${createdCollection.name} created!`);
+      toast.success(`Collection created!`);
     }
   }, [createdCollection]);
 
@@ -140,7 +140,10 @@ export default function JournalEntryPage() {
     name: string;
     description: string;
   }) => {
-    createCollectionFn(data.name, data.description || "");
+    createCollectionFn({
+      name: data.name,
+      description: data.description || "",
+    });
   };
 
   const isLoading = collectionsLoading || entryLoading || actionLoading;
