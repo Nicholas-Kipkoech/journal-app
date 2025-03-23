@@ -32,8 +32,6 @@ export async function createCollection({
 }
 
 export async function deleteCollection(collectionId: string) {
-  const res = await PrivateAxiosUtility.delete(
-    `/collections?collectionId=${collectionId}`
-  );
+  const res = await PrivateAxiosUtility.delete(`/collections/${collectionId}`);
   return res.data;
 }
