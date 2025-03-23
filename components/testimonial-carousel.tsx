@@ -32,7 +32,7 @@ const TestimonialCarousel = () => {
               <Card className="bg-white/80 backdrop-blur-sm">
                 <CardContent className="p-6">
                   <blockquote className="space-y-4">
-                    <p className="text-orange-700 italic">
+                    <p className="text-[#32a2a8] italic">
                       &quot;{testimonial.text}&quot;
                     </p>
                     <footer>

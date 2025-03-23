@@ -46,7 +46,7 @@ export default async function LandingPage() {
         <h1 className="text-5xl md:text-7xl lg:text-8xl gradient-title mb-6">
           Your Space to Reflect. <br /> Your Story to Tell.
         </h1>
-        <p className="text-lg md:text-xl text-orange-800 mb-8">
+        <p className="text-lg md:text-xl text-[#32a2a8] mb-8">
           Capture your thoughts, track your moods, and reflect on your journey
           in a beautiful, secure space.
         </p>
@@ -56,9 +56,7 @@ export default async function LandingPage() {
             <div className="border-b border-orange-100 pb-4 mb-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-orange-600" />
-                <span className="text-orange-900 font-medium">
-                  Today&rsquo;s Entry
-                </span>
+                <span className=" font-medium">Today&rsquo;s Entry</span>
               </div>
               <div className="flex gap-2">
                 <div className="h-3 w-3 rounded-full bg-orange-200" />
@@ -110,7 +108,7 @@ export default async function LandingPage() {
               <h3 className="font-semibold text-xl text-orange-900 mb-2">
                 {feature.title}
               </h3>
-              <p className="text-orange-700">{feature.description}</p>
+              <p className="text-[#32a2a8]">{feature.description}</p>
             </CardContent>
           </Card>
         ))}
@@ -126,7 +124,7 @@ export default async function LandingPage() {
             <h3 className="text-2xl font-bold text-orange-900">
               Rich Text Editor
             </h3>
-            <p className="text-lg text-orange-700">
+            <p className="text-lg text-[#32a2a8]">
               Express yourself fully with our powerful editor featuring:
             </p>
             <ul className="space-y-3">
@@ -163,7 +161,7 @@ export default async function LandingPage() {
             <h3 className="text-2xl font-bold text-orange-900">
               Mood Analytics
             </h3>
-            <p className="text-lg text-orange-700">
+            <p className="text-lg text-[#32a2a8]">
               Track your emotional journey with powerful analytics:
             </p>
             <ul className="space-y-3">
