@@ -24,10 +24,11 @@ import {
 } from "@/app/services/journal";
 import useFetch from "@/app/hooks/use-fetch";
 import "react-quill-new/dist/quill.snow.css";
+import withAuth from "@/app/hoc/authGuard";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
-export default function JournalEntryPage() {
+const JournalEntryPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit");
@@ -241,4 +242,6 @@ export default function JournalEntryPage() {
       />
     </div>
   );
-}
+};
+
+export default withAuth(JournalEntryPage);
