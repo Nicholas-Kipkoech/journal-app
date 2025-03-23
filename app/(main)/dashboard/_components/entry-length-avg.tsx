@@ -7,6 +7,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Cell,
 } from "recharts";
 
 interface Collection {
@@ -23,6 +24,11 @@ interface Props {
   entries: Entry[];
 }
 
+// Function to generate a random hex color
+const getRandomColor = () => {
+  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+};
+
 const EntryLengthAverages = ({ entries }: Props) => {
   // Helper function to count words in a text
   const countWords = (text: string) => (text ? text.split(/\s+/).length : 0);
@@ -31,26 +37,29 @@ const EntryLengthAverages = ({ entries }: Props) => {
   const categoryData = entries.reduce((acc, entry) => {
     const { collection, content } = entry;
     const wordCount = countWords(content);
+    const colletionName = collection?.name || "unorganized";
 
-    if (!acc[collection.name]) {
-      acc[collection.name] = {
-        category: collection.name,
+    if (!acc[colletionName]) {
+      acc[colletionName] = {
+        category: colletionName,
         totalWords: 0,
         count: 0,
+        color: getRandomColor(),
       };
     }
 
-    acc[collection.name].totalWords += wordCount;
-    acc[collection.name].count += 1;
+    acc[colletionName].totalWords += wordCount;
+    acc[colletionName].count += 1;
 
     return acc;
-  }, {} as Record<string, { category: string; totalWords: number; count: number }>);
+  }, {} as Record<string, { category: string; totalWords: number; count: number; color: string }>);
 
   // Compute averages and convert to array
   const data = Object.values(categoryData).map(
-    ({ category, totalWords, count }) => ({
+    ({ category, totalWords, count, color }) => ({
       category,
       avgWordCount: Math.round(totalWords / count), // Average words per entry
+      color,
     })
   );
 
@@ -61,7 +70,11 @@ const EntryLengthAverages = ({ entries }: Props) => {
         <XAxis dataKey="category" />
         <YAxis />
         <Tooltip />
-        <Bar dataKey="avgWordCount" fill="#82ca9d" />
+        <Bar dataKey="avgWordCount">
+          {data.map(({ category, color }) => (
+            <Cell key={category} fill={color} />
+          ))}
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   );

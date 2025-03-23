@@ -66,6 +66,8 @@ const MoodAnalytics: React.FC = () => {
     fn: fetchAnalytics,
   } = useFetch<AnalyticsData>(getAnalytics);
 
+  console.log(analytics);
+
   useEffect(() => {
     fetchAnalytics(period);
   }, [period]);
@@ -178,7 +180,7 @@ const MoodAnalytics: React.FC = () => {
                 <CardTitle>Word count trends over time</CardTitle>
               </CardHeader>
               <CardContent>
-                <WordCountTrends entries={analytics.data.entries} />
+                <WordCountTrends entries={analytics?.data.entries} />
               </CardContent>
             </Card>
             <Card className="w-full md:w-1/2">
@@ -186,15 +188,15 @@ const MoodAnalytics: React.FC = () => {
                 <CardTitle>Word/phrase frequency analysis cloud</CardTitle>
               </CardHeader>
               <CardContent>
-                <WordFrequencyCloud entries={analytics.data.entries} />
+                <WordFrequencyCloud entries={analytics?.data.entries} />
               </CardContent>
             </Card>
             <Card className="w-full md:w-1/2">
               <CardHeader>
-                <CardTitle>Word/phrase frequency analysis cloud</CardTitle>
+                <CardTitle>Entry length averages by category</CardTitle>
               </CardHeader>
               <CardContent>
-                <EntryLengthAverages entries={analytics.data.entries} />
+                <EntryLengthAverages entries={analytics?.data.entries} />
               </CardContent>
             </Card>
           </div>
