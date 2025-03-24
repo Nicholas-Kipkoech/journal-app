@@ -12,7 +12,7 @@ cd journal-app
 ### 2. Install Dependencies
 
 ```sh
-npm install
+npm install --legacy-peer-deps
 ```
 
 ```sh
